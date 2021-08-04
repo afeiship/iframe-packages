@@ -20,7 +20,7 @@
       },
       auth: function () {
         var { baseUrl, username, password } = this.external;
-        var url = `${baseUrl}/rails_jwt_admin/authentication`;
+        var url = baseUrl + '/rails_jwt_admin/authentication';
         if (this.token) return Promise.resolve(this.token);
         return new Promise(function (resolve, reject) {
           nx.JwtAuthorization.auth(url, { username, password })
