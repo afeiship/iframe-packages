@@ -4,7 +4,6 @@ const NxRailsFetch = require('../src');
 // expect(!!data).toBe(true);
 var http = new NxRailsFetch({
   external: {
-    baseUrl: 'https://www.fasimi.com',
     username: 'admin',
     password: '123123'
   }
