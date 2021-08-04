@@ -1,16 +1,16 @@
 (function () {
   var global = typeof window !== 'undefined' ? window : this || Function('return this')();
   var nx = global.nx || require('@jswork/next');
-  var NxFetch = nx.Fetch || require('@jswork/next-fetch');
   var nodeFetch = require('node-fetch');
   var defaults = { fetch: nodeFetch, external: { baseUrl: null, username: null, password: null } };
   var STD_UA =
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36';
 
   require('@afeiship/next-jwt-authorization');
+  require('@jswork/next-fetch');
 
-  var NxRailsApiSchema = nx.declare('nx.RailsApiSchema', {
-    extends: NxFetch,
+  var NxRailsFetch = nx.declare('nx.RailsFetch', {
+    extends: nx.Fetch,
     methods: {
       init: function (inOptions) {
         var options = nx.mix(null, defaults, inOptions);
@@ -41,6 +41,6 @@
   });
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = NxRailsApiSchema;
+    module.exports = NxRailsFetch;
   }
 })();

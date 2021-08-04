@@ -1,15 +1,15 @@
 {
-  "name": "@afeiship/next-rails-api-schema",
+  "name": "@afeiship/next-rails-fetch",
   "version": "1.0.0",
-  "description": "Rails api schema for my private project.",
-  "homepage": "https://github.com/afeiship/next-rails-api-schema",
+  "description": "Rails fetcher for my private project.",
+  "homepage": "https://github.com/afeiship/next-rails-fetch",
   "author": {
     "name": "afei",
     "email": "1290657123@qq.com"
   },
   "scripts": {
     "build": "gulp",
-    "test": "jest",
+    "test": "node __tests__/debug",
     "release": "release-it"
   },
   "main": "dist/index.js",
