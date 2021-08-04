@@ -12,14 +12,11 @@
   var NxRailsFetch = nx.declare('nx.RailsFetch', {
     extends: nx.Fetch,
     methods: {
-      init: function (inOptions) {
-        var options = nx.mix(null, defaults, inOptions);
-        this.base(options);
-        this.external = this.options.external;
-        this.token = null;
+      defaults: function () {
+        return defaults;
       },
       auth: function (inBaseURL) {
-        var { username, password } = this.external;
+        var { username, password } = this.options.external;
         var url = inBaseURL + '/rails_jwt_admin/authentication';
         if (this.token) return Promise.resolve(this.token);
         return new Promise(function (resolve, reject) {
@@ -34,7 +31,8 @@
         var parent = this.$base;
         var baseURL = new URL(inUrl);
         return this.auth(baseURL.origin).then(function (token) {
-          inOptions.headers = { Authorization: token, 'User-Agent': STD_UA };
+          var auth = { Authorization: token, 'User-Agent': STD_UA };
+          inOptions.headers = nx.mix(inOptions.headers, auth);
           return parent.request.call(self, inMethod, inUrl, inData, inOptions);
         });
       }
