@@ -4,20 +4,14 @@ import { Home } from './pages/home';
 import { About } from './pages/about';
 import { IframeApp } from './components/iframe-app';
 import { useEffect } from 'react';
+import iftTool from 'ift-tools';
+import commands from './commands';
 
 function App() {
   const navigate = useNavigate();
+
   useEffect(() => {
-    window.addEventListener('message', (e) => {
-      // 改变父级的 URL 并带 querystring
-      if (e.data.command === 'navigate') {
-        if (!e.data.payload.delta) {
-          navigate(e.data.payload.path + '?' + e.data.payload.querystring);
-        } else {
-          navigate(e.data.payload.delta);
-        }
-      }
-    });
+    iftTool.init(commands, { navigate });
   }, []);
 
   return (
@@ -25,13 +19,7 @@ function App() {
       <header>
         <button
           onClick={(e) => {
-            const el = document.querySelector('iframe');
-            el.contentWindow.postMessage(
-              {
-                command: 'updateRandom',
-              },
-              '*'
-            );
+            iftTool.post({ command: 'updateRandom' });
           }}>
           updateChildRandom
         </button>
@@ -40,13 +28,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
       </Routes>
-      <IframeApp
-        onLoad={(e) => {
-          // console.log('loading..');
-          // window.document.domain = 'dev.com';
-        }}
-        src="http://s2.dev.com:5002/"
-      />
+      <IframeApp src="http://s2.dev.com:5002/" />
     </div>
   );
 }

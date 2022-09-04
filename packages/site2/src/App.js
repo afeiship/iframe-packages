@@ -1,5 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
+import iftTools from 'ift-tools';
 
 function App() {
   const [v, setV] = useState();
@@ -19,14 +20,12 @@ function App() {
     <div className="App">
       <button
         onClick={(e) => {
-          const ift = {
+          iftTools.post({
             command: 'navigate',
             payload: {
-              path: '/about',
-              querystring: 'a=1&b=2',
+              url: '/about?a=1&b=2',
             },
-          };
-          window.top.postMessage(ift, '*');
+          });
         }}>
         子调父: change parent page
       </button>
