@@ -23,6 +23,7 @@ function getTarget() {
 }
 
 function post(arg, origin = "*") {
+  // persist: true/false
   const target = getTarget();
   target.postMessage(arg, origin);
 
@@ -58,10 +59,20 @@ function init(commands, inContext) {
       const v = commands[command];
       if (e.data.command === command) {
         const res = v(e.data.payload, iftTools.ctx);
-        post({
-          command: `${command}.response`,
-          payload: res,
-        });
+        // 返回的值可能是异步的情况
+        if (!res.then) {
+          post({
+            command: `${command}.response`,
+            payload: res,
+          });
+        } else {
+          res.then((rv) => {
+            post({
+              command: `${command}.response`,
+              payload: rv,
+            });
+          });
+        }
       }
     }
   });
