@@ -28,7 +28,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
       </Routes>
-      <IframeApp src="http://s2.dev.com:5002/" />
+      <IframeApp src="http://localhost:5002/" />
     </div>
   );
 }
