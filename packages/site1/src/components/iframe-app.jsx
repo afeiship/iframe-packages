@@ -7,5 +7,5 @@ const Container = styled.iframe`
 `;
 
 export const IframeApp = (props) => {
-  return <Container src={props.src} />;
+  return <Container src={props.src} onLoad={props.onLoad} />;
 };
