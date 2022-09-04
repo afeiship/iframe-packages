@@ -11,6 +11,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
+      console.log('init site1')
     iftTool.init(commands, { navigate });
   }, []);
 
@@ -19,7 +20,10 @@ function App() {
       <header>
         <button
           onClick={(e) => {
-            iftTool.post({ command: 'updateRandom' });
+            console.log('click?');
+            iftTool.post({ command: 'updateRandom' }).then((res) => {
+              console.log('res', res);
+            });
           }}>
           updateChildRandom
         </button>

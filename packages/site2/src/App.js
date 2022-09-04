@@ -7,6 +7,7 @@ import { UptRandom } from './components/upt-random';
 function App() {
   useEffect(() => {
     iftTools.init(commands);
+    console.log('site 2 mounted.');
   }, []);
 
   return (

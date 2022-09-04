@@ -1,6 +1,9 @@
 export default {
   updateRandom: function (inOptions, inContext) {
     const { setV } = inContext;
-    setV('from parent: ' + Math.random());
+    const v = Math.random();
+    setV('from parent: ' + v);
+    console.log('set?')
+    return v;
   },
 };
