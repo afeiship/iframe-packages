@@ -15,6 +15,11 @@ function isInIframe() {
 
 function post(arg, origin = "*") {
   const res = isInIframe();
+  if (iftTools.ctx["__$target__"]) {
+    const el = iftTools.ctx["__$target__"];
+    return el.postMessage(arg, origin);
+  }
+
   if (res) {
     window.top.postMessage(arg, origin);
   } else {
