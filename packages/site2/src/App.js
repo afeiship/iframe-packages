@@ -1,19 +1,15 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import iftTools from 'ift-tools';
+import commands from './commands';
 
 function App() {
   const [v, setV] = useState();
   useEffect(() => {
-    // window.document.domain = 'dev.com'
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener('message', (e) => {
-      if (e.data.command === 'updateRandom') {
-        setV('from parent: ' + Math.random());
-      }
+    iftTools.init(commands, {
+      setV,
     });
+    // window.document.domain = 'dev.com'
   }, []);
 
   return (
