@@ -6,6 +6,8 @@ const iftTools = {
   },
 };
 
+// url-watch 信息，也在 iframe 之间进行传递
+
 function isInIframe() {
   try {
     return window.self !== window.top;
@@ -43,7 +45,6 @@ function init(commands, inContext) {
   const uri = new URL(location.href);
   const qs = uri.searchParams;
   const ift = qs.get("ift");
-  console.log("ft:", ift);
   if (ift) {
     // todo: 这里分里面的 iframe/外面的 iframe 的情况，目前只考虑外面的 iframe 情况
     const arg = NxJson.decode(ift);
@@ -60,7 +61,7 @@ function init(commands, inContext) {
       if (e.data.command === command) {
         const res = v(e.data.payload, iftTools.ctx);
         // 返回的值可能是异步的情况
-        if (!res.then) {
+        if (!res || !res.then) {
           post({
             command: `${command}.response`,
             payload: res,
