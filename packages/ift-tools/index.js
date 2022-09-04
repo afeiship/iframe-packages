@@ -14,15 +14,17 @@ function isInIframe() {
   }
 }
 
-function post(arg, origin = "*") {
-  console.log("post arg:", arg);
-  const res = isInIframe();
-  if (res) {
-    window.top.postMessage(arg, origin);
+function getTarget() {
+  if (isInIframe()) {
+    return window.top;
   } else {
-    const el = document.querySelector("iframe");
-    el.contentWindow.postMessage(arg, origin);
+    return document.querySelector("iframe").contentWindow;
   }
+}
+
+function post(arg, origin = "*") {
+  const target = getTarget();
+  target.postMessage(arg, origin);
 
   return new Promise((resolve) => {
     const handler = (e) => {
@@ -42,10 +44,11 @@ function init(commands, inContext) {
   const ift = qs.get("ift");
   console.log("ft:", ift);
   if (ift) {
+    // todo: 这里分里面的 iframe/外面的 iframe 的情况，目前只考虑外面的 iframe 情况
     const arg = NxJson.decode(ift);
     const iframe = document.querySelector("iframe");
     iframe.onload = function () {
-      console.log('loaded.')
+      console.log("loaded.");
       iframe.contentWindow.postMessage(arg, "*");
     };
   }
