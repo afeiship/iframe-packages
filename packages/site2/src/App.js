@@ -2,14 +2,11 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import iftTools from 'ift-tools';
 import commands from './commands';
+import { UptRandom } from './components/upt-random';
 
 function App() {
-  const [v, setV] = useState();
   useEffect(() => {
-    iftTools.init(commands, {
-      setV,
-    });
-    // window.document.domain = 'dev.com'
+    iftTools.init(commands);
   }, []);
 
   return (
@@ -39,12 +36,7 @@ function App() {
         子调父:Back
       </button>
 
-      <button
-        onClick={(e) => {
-          setV(Math.random());
-        }}>
-        Set random state - {v}
-      </button>
+      <UptRandom />
     </div>
   );
 }
