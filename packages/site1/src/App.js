@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import IframeMate from 'iframe-mate';
 import commands from './commands';
 
-const ifmate = new IframeMate();
+const ifmate = new IframeMate({ routerType: 'browser' });
 
 function App() {
   const navigate = useNavigate();
@@ -23,11 +23,9 @@ function App() {
         <button
           onClick={(e) => {
             console.log('click?');
-            ifmate
-              .post({ command: 'updateRandom' })
-              .then((res) => {
-                console.log('res::', res);
-              })
+            ifmate.post({ command: 'updateRandom' }).then((res) => {
+              console.log('res::', res);
+            });
           }}>
           updateChildRandom
         </button>

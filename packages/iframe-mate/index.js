@@ -33,8 +33,10 @@ module.exports = class IframeMate {
     // url: ifm message process
     if (this.ifm) {
       const ifmMessage = NxJson2base64.decode(this.ifm);
-      // ignore response
-      this.post(ifmMessage);
+      const iframe = document.querySelector("iframe");
+      iframe.addEventListener("load", () => {
+        this.post(ifmMessage);
+      });
     }
 
     // update context
