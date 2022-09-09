@@ -4,15 +4,17 @@ import { Home } from './pages/home';
 import { About } from './pages/about';
 import { IframeApp } from './components/iframe-app';
 import { useEffect } from 'react';
-import iftTool from 'ift-tools';
+import IframeMate from 'iframe-mate';
 import commands from './commands';
+
+const ifmate = new IframeMate();
 
 function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-      console.log('init site1')
-    iftTool.init(commands, { navigate });
+    console.log('init site1');
+    ifmate.init(commands, { navigate });
   }, []);
 
   return (
@@ -21,9 +23,11 @@ function App() {
         <button
           onClick={(e) => {
             console.log('click?');
-            iftTool.post({ command: 'updateRandom' }).then((res) => {
-              console.log('res', res);
-            });
+            ifmate
+              .post({ command: 'updateRandom' })
+              .then((res) => {
+                console.log('res::', res);
+              })
           }}>
           updateChildRandom
         </button>

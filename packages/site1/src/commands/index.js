@@ -1,5 +1,5 @@
 export default {
-  navigate: function (inOptions, ctx) {
+  navigate: (inOptions, ctx) => {
     const { navigate } = ctx;
     var url = inOptions.url;
     var delta = inOptions.delta;

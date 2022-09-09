@@ -1,12 +1,16 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import iftTools from 'ift-tools';
 import commands from './commands';
 import { UptRandom } from './components/upt-random';
+import IframeMate from 'iframe-mate';
+
+const ifmate = new IframeMate();
+
+window.ifmate = ifmate;
 
 function App() {
   useEffect(() => {
-    iftTools.init(commands);
+    ifmate.init(commands);
     console.log('site 2 mounted.');
   }, []);
 
@@ -14,7 +18,7 @@ function App() {
     <div className="App">
       <button
         onClick={(e) => {
-          iftTools.post({
+          ifmate.post({
             command: 'navigate',
             payload: {
               url: '/about?a=1&b=2',
@@ -32,7 +36,7 @@ function App() {
               delta: -1,
             },
           };
-          window.top.postMessage(ift, '*');
+          ifmate.post(ift);
         }}>
         子调父:Back
       </button>

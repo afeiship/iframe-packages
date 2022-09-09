@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import iftTools from 'ift-tools';
+// import iftTools from 'ift-tools';
 
 export const UptRandom = () => {
   const [v, setV] = useState();
   useEffect(() => {
-    iftTools.update({ setV });
+    ifmate.update({ setV });
   }, []);
   return (
     <button
