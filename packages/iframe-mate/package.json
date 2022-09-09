@@ -12,6 +12,7 @@
   "dependencies": {
     "@jswork/next-is-in-iframe": "^1.0.0",
     "@jswork/next-json2base64": "^1.0.3",
-    "@jswork/next-qs": "^1.0.1"
+    "@jswork/next-qs": "^1.0.1",
+    "shields-log": "^1.0.4"
   }
 }

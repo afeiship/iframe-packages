@@ -2,8 +2,19 @@ const nx = require("@jswork/next");
 const NxJson2base64 = require("@jswork/next-json2base64");
 const nxQs = require("@jswork/next-qs");
 const nxIsInIframe = require("@jswork/next-is-in-iframe");
+
+function colorLog() {
+  console.log(
+    "%c[ifm-debug]:",
+    "padding: 1px; border-radius: 3px; color: #fff; background: #d5624f;",
+    ...arguments
+  );
+}
+
 const defaults = {
+  queryKey: "ifm",
   routerType: "hash", // hash | browser
+  debug: true,
 };
 
 module.exports = class IframeMate {
@@ -18,7 +29,7 @@ module.exports = class IframeMate {
         ? window.location.hash
         : window.location.url;
     const qs = nx.qs(targetQsUrl);
-    return qs.ifm;
+    return qs[this.options.queryKey];
   }
 
   get targetWin() {
@@ -47,10 +58,10 @@ module.exports = class IframeMate {
       const handler = inCommands[command];
       if (handler) {
         const res = Promise.resolve(handler(payload, this.context));
-        res.then((rv) => {
+        res.then((ret) => {
           this.post({
             command: `${command}.response`,
-            payload: rv,
+            payload: ret,
           });
         });
       }
@@ -59,6 +70,7 @@ module.exports = class IframeMate {
 
   // message: { command: 'navigate', payload: {} }
   post(inMessage, inTargetOrigin = "*") {
+    this.options.debug && colorLog(inMessage);
     const isSingle = !Array.isArray(inMessage);
     const message = isSingle ? [inMessage] : inMessage;
     const results = message.map((msg) => {
