@@ -1,5 +1,6 @@
 {
   "name": "iframe-mate-draft",
+  "private": true,
   "version": "1.0.0",
   "description": "Iframe co mate.",
   "main": "index.js",
