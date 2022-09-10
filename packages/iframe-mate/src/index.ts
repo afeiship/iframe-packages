@@ -69,10 +69,10 @@ export default class IframeMate {
     // url: ifm message process
     // ifm only appear in parent(init stage will: standalone)
     if (this.ifm) {
-      const ifmMessage = nx.Json2base64.decode(this.ifm);
+      const ifm4msg = nx.Json2base64.decode(this.ifm);
       nx.waitToDisplay('iframe', 200, () => {
         this.contentFrame.addEventListener('load', () => {
-          this.post(ifmMessage);
+          this.post(ifm4msg);
         });
       });
     }
