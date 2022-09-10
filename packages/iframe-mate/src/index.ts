@@ -3,6 +3,7 @@ import '@jswork/next';
 import '@jswork/next-qs';
 import '@jswork/next-is-in-iframe';
 import '@jswork/next-json2base64';
+import '@jswork/next-wait-to-display';
 
 type Context = Record<string, any>;
 type MessageItem = { command: string; payload?: any };
@@ -10,9 +11,11 @@ type Message = MessageItem | MessageItem[];
 type Command = Record<string, (ctx: any, ...args: any[]) => any>;
 type Role = 'child' | 'parent' | 'standalone';
 
-interface Options {
+export type SupportRouterType = 'hash' | 'browser';
+
+export interface Options {
   queryKey?: string;
-  routerType?: 'hash' | 'browser';
+  routerType?: SupportRouterType;
   debug?: boolean;
 }
 
@@ -57,8 +60,11 @@ export default class IframeMate {
     // url: ifm message process
     if (this.ifm) {
       const ifmMessage = nx.Json2base64.decode(this.ifm);
-      this.contentFrame.addEventListener('load', () => {
-        this.post(ifmMessage);
+      nx.waitToDisplay('iframe', 200, () => {
+        console.log('iframe wait to display...');
+        this.contentFrame.addEventListener('load', () => {
+          this.post(ifmMessage);
+        });
       });
     }
 

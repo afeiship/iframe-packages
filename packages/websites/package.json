@@ -11,7 +11,7 @@
   "author": "afeiship",
   "license": "MIT",
   "dependencies": {
-    "iframe-mate-draft": "^1.0.0",
-    "ift-tools": "^1.0.0"
+    "@jswork/iframe-mate": "^1.0.0",
+    "@jswork/react-iframe-mate": "^1.0.0"
   }
 }

@@ -3,27 +3,19 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Home } from './pages/home';
 import { About } from './pages/about';
 import { IframeApp } from './components/iframe-app';
+import { useIfm } from '@jswork/react-iframe-mate';
 import { useEffect } from 'react';
-import IframeMate from '@jswork/iframe-mate';
-import commands from './commands';
-
-const ifmate = new IframeMate({ routerType: 'browser', debug: true });
 
 function App() {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log('init site1');
-    ifmate.init(commands, { navigate });
-  }, []);
+  const { ifm } = useIfm({ navigate });
 
   return (
     <div className="App">
       <header>
         <button
           onClick={(e) => {
-            console.log('click?');
-            ifmate.post({ command: 'updateRandom' }).then((res) => {
+            ifm.post({ command: 'updateRandom' }).then((res) => {
               console.log('res::', res);
             });
           }}>

@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useIfm } from '@jswork/react-iframe-mate';
 // import iftTools from 'ift-tools';
 
 export const UptRandom = () => {
   const [v, setV] = useState();
+  const { ifm } = useIfm();
+  console.log('ifm:', ifm);
   useEffect(() => {
-    ifmate.update({ setV });
+    ifm.update({ setV });
   }, []);
   return (
     <button

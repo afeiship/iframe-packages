@@ -1,28 +1,19 @@
 import './App.css';
-import { useEffect, useState } from 'react';
-import commands from './commands';
 import { UptRandom } from './components/upt-random';
-import IframeMate from '@jswork/iframe-mate';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Qa1 } from './pages/qa1';
 import { Qa2 } from './pages/qa2';
-
-const ifmate = new IframeMate({ debug: true });
-
-window.ifmate = ifmate;
+import { useIfm } from '@jswork/react-iframe-mate';
 
 function App() {
   const navigate = useNavigate();
-  useEffect(() => {
-    ifmate.init(commands, { navigate });
-    console.log('site 2 mounted.');
-  }, []);
+  const { ifm } = useIfm({ navigate });
 
   return (
     <div className="App">
       <button
         onClick={(e) => {
-          ifmate.post({
+          ifm.post({
             command: 'navigate',
             payload: {
               url: '/about?a=1&b=2',
@@ -34,13 +25,13 @@ function App() {
 
       <button
         onClick={(e) => {
-          const ift = {
+          const msg = {
             command: 'navigate',
             payload: {
               delta: -1,
             },
           };
-          ifmate.post(ift);
+          ifm.post(msg);
         }}>
         子调父:Back
       </button>
