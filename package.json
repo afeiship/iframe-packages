@@ -1,5 +1,5 @@
 {
-  "name": "react2iframe",
+  "name": "iframe-packages",
   "private": true,
   "workspaces": {
     "packages": [

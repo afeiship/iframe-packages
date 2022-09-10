@@ -10,6 +10,6 @@
   "author": "afeiship",
   "license": "ISC",
   "dependencies": {
-    "iframe-mate": "^1.0.0"
+    "iframe-mate-draft": "^1.0.0"
   }
 }

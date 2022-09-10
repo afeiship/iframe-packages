@@ -1,0 +1,18 @@
+{
+  "name": "iframe-mate-draft",
+  "version": "1.0.0",
+  "description": "Iframe co mate.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "afeiship",
+  "license": "MIT",
+  "dependencies": {
+    "@jswork/next-is-in-iframe": "^1.0.0",
+    "@jswork/next-json2base64": "^1.0.3",
+    "@jswork/next-qs": "^1.0.1",
+    "shields-log": "^1.0.4"
+  }
+}

@@ -4,7 +4,7 @@ import { Home } from './pages/home';
 import { About } from './pages/about';
 import { IframeApp } from './components/iframe-app';
 import { useEffect } from 'react';
-import IframeMate from 'iframe-mate';
+import IframeMate from '@jswork/iframe-mate';
 import commands from './commands';
 
 const ifmate = new IframeMate({ routerType: 'browser' });

@@ -2,7 +2,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import commands from './commands';
 import { UptRandom } from './components/upt-random';
-import IframeMate from 'iframe-mate';
+import IframeMate from '@jswork/iframe-mate';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Qa1 } from './pages/qa1';
 import { Qa2 } from './pages/qa2';
