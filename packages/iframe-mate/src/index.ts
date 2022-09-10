@@ -17,9 +17,14 @@ export interface Options {
   queryKey?: string;
   routerType?: SupportRouterType;
   debug?: boolean;
+  timeout?: number;
 }
 
-const defaults: Options = { queryKey: 'ifm', routerType: 'hash', debug: false };
+const defaults: Options = {
+  queryKey: 'ifm',
+  routerType: 'hash',
+  debug: false,
+};
 
 export default class IframeMate {
   public options: Options;
@@ -70,11 +75,17 @@ export default class IframeMate {
     // ifm only appear in parent(init stage will: standalone)
     if (this.ifm) {
       const ifm4msg = nx.Json2base64.decode(this.ifm);
-      nx.waitToDisplay('iframe', 200, () => {
-        this.contentFrame.addEventListener('load', () => {
-          this.post(ifm4msg);
-        });
-      });
+
+      nx.waitToDisplay(
+        'iframe',
+        200,
+        () => {
+          this.contentFrame.addEventListener('load', () => {
+            this.post(ifm4msg);
+          });
+        },
+        1000
+      );
     }
 
     // init commands context
