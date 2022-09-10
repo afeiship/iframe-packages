@@ -32,11 +32,15 @@ module.exports = class IframeMate {
     return qs[this.options.queryKey];
   }
 
+  get contentFrame() {
+    return document.querySelector("iframe");
+  }
+
   get targetWin() {
     if (nxIsInIframe()) {
       return window.top;
     } else {
-      return document.querySelector("iframe").contentWindow;
+      return this.contentFrame.contentWindow;
     }
   }
 
@@ -44,13 +48,12 @@ module.exports = class IframeMate {
     // url: ifm message process
     if (this.ifm) {
       const ifmMessage = NxJson2base64.decode(this.ifm);
-      const iframe = document.querySelector("iframe");
-      iframe.addEventListener("load", () => {
+      this.contentFrame.addEventListener("load", () => {
         this.post(ifmMessage);
       });
     }
 
-    // update context
+    // init commands context
     this.update(inContext);
 
     window.addEventListener("message", (e) => {
