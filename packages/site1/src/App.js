@@ -4,7 +4,6 @@ import { Home } from './pages/home';
 import { About } from './pages/about';
 import { IframeApp } from './components/iframe-app';
 import { useIfm } from '@jswork/react-iframe-mate';
-import { useEffect } from 'react';
 
 function App() {
   const navigate = useNavigate();

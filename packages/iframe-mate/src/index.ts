@@ -31,6 +31,10 @@ export default class IframeMate {
     return this.contentFrame ? 'parent' : 'standalone';
   }
 
+  get mateable() {
+    return this.role !== 'standalone';
+  }
+
   get ifm(): string | undefined {
     const targetQsUrl =
       this.options.routerType === 'hash'
@@ -47,8 +51,15 @@ export default class IframeMate {
   }
 
   get targetWin() {
-    if (nx.isInIframe()) return window.top;
-    return this.contentFrame.contentWindow;
+    switch (this.role) {
+      case 'standalone':
+        return window;
+      case 'parent':
+        return this.contentFrame.contentWindow;
+      case 'child':
+        return window.top;
+    }
+    return window;
   }
 
   constructor(inOptions: Options) {
@@ -61,7 +72,6 @@ export default class IframeMate {
     if (this.ifm) {
       const ifmMessage = nx.Json2base64.decode(this.ifm);
       nx.waitToDisplay('iframe', 200, () => {
-        console.log('iframe wait to display...');
         this.contentFrame.addEventListener('load', () => {
           this.post(ifmMessage);
         });
@@ -91,7 +101,7 @@ export default class IframeMate {
     const isSingle = !Array.isArray(inMessage);
     const message = isSingle ? [inMessage] : inMessage;
     const targetWin = this.targetWin;
-    if (!targetWin) return Promise.resolve(null);
+    if (!this.mateable || !targetWin) return Promise.resolve(null);
 
     const results = message.map((msg) => {
       targetWin.postMessage(msg, inTargetOrigin);
