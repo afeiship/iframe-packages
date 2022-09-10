@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import IframeMate from '@jswork/iframe-mate';
 import commands from './commands';
 
-const ifmate = new IframeMate({ routerType: 'browser' });
+const ifmate = new IframeMate({ routerType: 'browser', debug: true });
 
 function App() {
   const navigate = useNavigate();

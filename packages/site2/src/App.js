@@ -7,7 +7,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Qa1 } from './pages/qa1';
 import { Qa2 } from './pages/qa2';
 
-const ifmate = new IframeMate();
+const ifmate = new IframeMate({ debug: true });
 
 window.ifmate = ifmate;
 
