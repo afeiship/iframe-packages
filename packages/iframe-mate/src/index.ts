@@ -6,7 +6,7 @@ import '@jswork/next-json2base64';
 import '@jswork/next-wait-to-display';
 
 type Context = Record<string, any>;
-type MessageItem = { command: string; payload?: any };
+type MessageItem = { command: string; persist?: boolean; payload?: any };
 type Message = MessageItem | MessageItem[];
 type Command = Record<string, (ctx: any, ...args: any[]) => any>;
 type Role = 'child' | 'parent' | 'standalone';
@@ -52,8 +52,6 @@ export default class IframeMate {
 
   get targetWin() {
     switch (this.role) {
-      case 'standalone':
-        return window;
       case 'parent':
         return this.contentFrame.contentWindow;
       case 'child':
@@ -69,6 +67,7 @@ export default class IframeMate {
 
   init(inCommands: Command[], inContext: Context) {
     // url: ifm message process
+    // ifm only appear in parent(init stage will: standalone)
     if (this.ifm) {
       const ifmMessage = nx.Json2base64.decode(this.ifm);
       nx.waitToDisplay('iframe', 200, () => {
@@ -79,7 +78,7 @@ export default class IframeMate {
     }
 
     // init commands context
-    this.update(inContext);
+    inContext && this.update(inContext);
 
     window.addEventListener('message', (e: MessageEvent<MessageItem>) => {
       const { command, payload } = e.data;
