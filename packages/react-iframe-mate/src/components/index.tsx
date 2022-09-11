@@ -1,8 +1,13 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, ReactNode, useContext } from 'react';
 import IframeMate from '@jswork/iframe-mate';
 import type { Options } from '@jswork/iframe-mate';
 
 export const Context = React.createContext<{ ifm: IframeMate } | null>(null);
+export const useIfm = (inCtx?) => {
+  const res = useContext(Context);
+  if (inCtx) res!.ifm.update(inCtx);
+  return res;
+};
 
 type ReactIframeMateProps = Options & {
   commands: any[];

@@ -5,7 +5,7 @@ import { Qa1 } from './pages/qa1';
 import { Qa2 } from './pages/qa2';
 import { useIfm } from '@jswork/react-iframe-mate';
 import { ATab } from './components/a-tab';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 function App() {
   const navigate = useNavigate();
