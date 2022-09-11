@@ -36,16 +36,31 @@ export default class IframeMate {
   public options: Options;
   public context: Context;
 
+  /**
+   * 当前 iframe 的角色:
+   * parent: 作为父级，一定有子级存在
+   * child: 作为子级，一定有父级存在
+   * standalone: 独立存在，向上/向下，均不存在 iframe 元素
+   * @return Role
+   */
   get role(): Role {
     const isInIframe = nx.isInIframe();
     if (isInIframe) return 'child';
     return this.contentFrame ? 'parent' : 'standalone';
   }
 
+  /**
+   * 判断当前所处的环境，是否存在 iframe，即需要通讯的场景。
+   * @return boolean
+   */
   get mateable() {
     return this.role !== 'standalone';
   }
 
+  /**
+   * 取得当前 url 中的 ifm 参数
+   * @return string | undefined
+   */
   get ifm(): string | undefined {
     const targetQsUrl =
       this.options.routerType === 'hash'
@@ -57,10 +72,18 @@ export default class IframeMate {
     return qs[key];
   }
 
+  /**
+   * 取得当前所处环境的 iframe 元素
+   * @return HTMLIFrameElement | undefined
+   */
   get contentFrame(): HTMLIFrameElement {
     return document.querySelector('iframe')!;
   }
 
+  /**
+   * 取得当前环境的 window 对象
+   * @return Window
+   */
   get targetWin() {
     switch (this.role) {
       case 'parent':
@@ -71,13 +94,17 @@ export default class IframeMate {
     return window;
   }
 
+  /**
+   * 构造函数: 根据 options 做一些基本的初始化工作
+   * @param inOptions
+   */
   constructor(inOptions: Options) {
     this.options = nx.mix(null, defaults, inOptions);
     this.context = {};
   }
 
   /**
-   * 初始化
+   * 初始化，一般需要放在 DOM 初始化完成的情况下进行
    * @param inCommands
    * @param inContext
    */
