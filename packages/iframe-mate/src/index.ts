@@ -17,13 +17,16 @@ export interface Options {
   queryKey?: string;
   routerType?: SupportRouterType;
   debug?: boolean;
-  timeout?: number;
+  ifmReplace?: boolean;
+  times?: number;
 }
 
 const defaults: Options = {
   queryKey: 'ifm',
   routerType: 'hash',
   debug: false,
+  ifmReplace: false,
+  times: 1000,
 };
 
 export default class IframeMate {
@@ -70,6 +73,11 @@ export default class IframeMate {
     this.context = {};
   }
 
+  /**
+   * 初始化
+   * @param inCommands
+   * @param inContext
+   */
   init(inCommands: Command[], inContext: Context) {
     // url: ifm message process
     // ifm only appear in parent(init stage will: standalone)
@@ -84,7 +92,7 @@ export default class IframeMate {
             this.post(ifm4msg);
           });
         },
-        1000
+        this.options.times
       );
     }
 
@@ -106,6 +114,11 @@ export default class IframeMate {
     });
   }
 
+  /**
+   * 发送消息
+   * @param inMessage
+   * @param inTargetOrigin
+   */
   post(inMessage: Message, inTargetOrigin = '*'): Promise<any> {
     this.options.debug && log(this.role, inMessage);
     const isSingle = !Array.isArray(inMessage);
@@ -115,9 +128,13 @@ export default class IframeMate {
 
     const results = message.map((msg) => {
       targetWin.postMessage(msg, inTargetOrigin);
-      const url = window.location.href;
-      const ifmString = nx.Json2base64.encode(msg);
-      if (msg.persist) this.updateIfm(url, ifmString);
+
+      if (msg.persist) {
+        delete msg.persist;
+        const url = window.location.href;
+        const ifmString = nx.Json2base64.encode(msg);
+        this.updateIfm(url, ifmString);
+      }
 
       return new Promise((resolve, reject) => {
         const handler = (e) => {
@@ -137,18 +154,27 @@ export default class IframeMate {
     return isSingle ? results[0] : Promise.all(results);
   }
 
+  /**
+   * 更新上下文
+   * @param inObj
+   */
   update(inObj: Context) {
     nx.mix(this.context, inObj);
   }
 
-  updateIfm(inUrl: string, inValue: string, inOptions = { replace: true }) {
-    const stateMethod = inOptions.replace ? 'replaceState' : 'pushState';
+  /**
+   * 将 URL 后面添国 ?ifm 字符串参数
+   * @param inUrl
+   * @param inValue
+   */
+  updateIfm(inUrl: string, inValue: string) {
+    const method = this.options.ifmReplace ? 'replaceState' : 'pushState';
     const hashurl = `https://js.work` + inUrl.split('#')[1];
     const url = inUrl.includes('#') ? hashurl : inUrl;
     const uri = new URL(url);
     uri.searchParams.set('ifm', inValue);
     const ifmp = uri.pathname + uri.search;
     log('ifmp', ifmp, uri.toString());
-    window.history[stateMethod](null, '', ifmp);
+    window.history[method](null, '', ifmp);
   }
 }
