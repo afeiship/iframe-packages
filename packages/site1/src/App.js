@@ -4,10 +4,16 @@ import { Home } from './pages/home';
 import { About } from './pages/about';
 import { IframeApp } from './components/iframe-app';
 import { useIfm } from '@jswork/react-iframe-mate';
+import { useEffect, useState } from 'react';
 
 function App() {
   const navigate = useNavigate();
+  const [v, setV] = useState();
   const { ifm } = useIfm({ navigate });
+
+  useEffect(() => {
+    document.domain = 'dev.com';
+  }, []);
 
   return (
     <div className="App">
@@ -39,12 +45,18 @@ function App() {
           }>
           SET IFM: tabKey
         </button>
+        <button
+          onClick={(e) => {
+            setV('ONLY_VALUE');
+          }}>
+          SetValue: {v}
+        </button>
       </header>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
       </Routes>
-      <IframeApp src="http://localhost:5002/" />
+      <IframeApp src="http://s2.dev.com:5002/" />
     </div>
   );
 }

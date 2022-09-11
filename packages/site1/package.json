@@ -20,8 +20,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:dev": "start-server-and-test start http://s1.dev.com:5001 cypress:open",
     "eject": "react-scripts eject"
   },
   "browserslist": {
@@ -37,6 +40,8 @@
     ]
   },
   "devDependencies": {
-    "prettier": "^2.6.2"
+    "cypress": "^10.7.0",
+    "prettier": "^2.6.2",
+    "start-server-and-test": "^1.14.0"
   }
 }

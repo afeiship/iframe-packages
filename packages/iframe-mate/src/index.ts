@@ -63,7 +63,7 @@ export default class IframeMate {
       case 'parent':
         return this.contentFrame.contentWindow;
       case 'child':
-        return window.top;
+        return window.parent;
     }
     return window;
   }

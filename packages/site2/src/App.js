@@ -5,12 +5,16 @@ import { Qa1 } from './pages/qa1';
 import { Qa2 } from './pages/qa2';
 import { useIfm } from '@jswork/react-iframe-mate';
 import { ATab } from './components/a-tab';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
   const navigate = useNavigate();
   const [tabKey, setTabKey] = useState('k1');
   const { ifm } = useIfm({ navigate, setTabKey });
+
+  useEffect(() => {
+    document.domain = 'dev.com';
+  }, []);
 
   return (
     <div className="App">
