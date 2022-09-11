@@ -1,6 +1,6 @@
 {
   "name": "@jswork/iframe-mate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Iframe mate.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -45,7 +45,7 @@
     "@jswork/next-json2base64": "^1.0.4",
     "@jswork/next-qs": "^1.0.4",
     "@jswork/next-wait-to-display": "^1.0.7",
-    "@jswork/react-iframe-mate": "^1.0.0",
+    "@jswork/react-iframe-mate": "^1.0.1",
     "@jswork/root-domain": "^1.0.0"
   }
 }
