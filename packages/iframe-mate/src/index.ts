@@ -4,7 +4,6 @@ import '@jswork/next-qs';
 import '@jswork/next-is-in-iframe';
 import '@jswork/next-json2base64';
 import '@jswork/next-wait-to-display';
-import { log } from './misc';
 
 type Context = Record<string, any>;
 type MessageItem = { command: string; persist?: boolean; payload?: any };
@@ -30,6 +29,13 @@ const defaults: Options = {
   isCorsDomain: false,
   ifmReplace: false,
   times: 1000,
+};
+
+const colors = {
+  parent: '#2082bf',
+  child: '#97c232',
+  standalone: '#8b42d9',
+  defaults: '#f17f4a',
 };
 
 export default class IframeMate {
@@ -234,7 +240,12 @@ export default class IframeMate {
    */
   private log(inRole, ...args) {
     if (this.options.debug) {
-      log(inRole, ...args);
+      const color = colors[inRole] || colors.defaults;
+      console.log(
+        `%c[ifm-debug:${inRole}]:`,
+        `padding: 1px; border-radius: 3px; color: #fff; background: ${color};`,
+        ...args
+      );
     }
   }
 }
