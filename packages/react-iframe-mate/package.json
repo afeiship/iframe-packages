@@ -1,7 +1,7 @@
 {
   "name": "@jswork/react-iframe-mate",
   "homepage": "https://js.work",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "React iframe mate component.",
   "license": "MIT",
   "main": "dist/index.js",
@@ -71,7 +71,7 @@
     "vite-plugin-pwa": "^0.7.3"
   },
   "dependencies": {
-    "@jswork/iframe-mate": "^1.0.3",
+    "@jswork/iframe-mate": "^1.0.4",
     "@jswork/noop": "^1.0.0",
     "classnames": "^2.2.6"
   },
