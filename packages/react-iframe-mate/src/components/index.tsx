@@ -12,6 +12,7 @@ export const useIfm = (inCtx?) => {
 type ReactIframeMateProps = Options & {
   commands: any[];
   context?: any;
+  harmony?: boolean;
   children: ReactNode;
 };
 
@@ -20,13 +21,15 @@ type ReactIframeState = {
 };
 
 export default class ReactIframeMate extends Component<ReactIframeMateProps, ReactIframeState> {
-  static defaultProps = {};
+  static defaultProps = { harmony: false };
   state = { instance: null };
 
   componentDidMount() {
-    const { commands, context, ...options } = this.props;
+    const { commands, context, harmony, ...options } = this.props;
     const instance = new IframeMate(options);
+    const harmonyCtx = window['nx'];
     instance.init(commands, context);
+    if (harmony && harmonyCtx) harmonyCtx.set(harmonyCtx, '$ifm', instance);
     this.setState({ instance });
   }
 
