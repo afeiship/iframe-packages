@@ -8,7 +8,7 @@ import '@jswork/next-wait-to-display';
 type Context = Record<string, any>;
 type MessageItem = { command: string; persist?: boolean; payload?: any };
 type Message = MessageItem | MessageItem[];
-type Command = Record<string, (ctx: any, ...args: any[]) => any>;
+type Command = Record<string, (payload: any, ctx: Context) => any>;
 type Role = 'child' | 'parent' | 'standalone';
 
 export type SupportRouterType = 'hash' | 'browser' | 'hashbang';
