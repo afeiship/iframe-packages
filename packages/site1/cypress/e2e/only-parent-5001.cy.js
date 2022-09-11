@@ -13,6 +13,6 @@ describe('empty spec', () => {
     cy.get('button:nth-child(3)').click();
 
     cy.get('button:nth-child(4)').should('contain.text', 'ONLY_VALUE');
-    cy.get('h1').should('contain.text', 'Home Page');
+    cy.get('h1').should('contain.text', 'Home page');
   });
 });

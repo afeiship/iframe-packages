@@ -1,9 +1,10 @@
-import { log } from './misc';
+import rootDomain from '@jswork/root-domain';
 import '@jswork/next';
 import '@jswork/next-qs';
 import '@jswork/next-is-in-iframe';
 import '@jswork/next-json2base64';
 import '@jswork/next-wait-to-display';
+import { log } from './misc';
 
 type Context = Record<string, any>;
 type MessageItem = { command: string; persist?: boolean; payload?: any };
@@ -17,6 +18,7 @@ export interface Options {
   queryKey?: string;
   routerType?: SupportRouterType;
   debug?: boolean;
+  isCorsDomain?: boolean;
   ifmReplace?: boolean;
   times?: number;
 }
@@ -25,6 +27,7 @@ const defaults: Options = {
   queryKey: 'ifm',
   routerType: 'hash',
   debug: false,
+  isCorsDomain: false,
   ifmReplace: false,
   times: 1000,
 };
@@ -81,9 +84,11 @@ export default class IframeMate {
   init(inCommands: Command[], inContext: Context) {
     // url: ifm message process
     // ifm only appear in parent(init stage will: standalone)
+    this.initCorsDomain();
+
     if (this.ifm) {
       const ifm4msg = nx.Json2base64.decode(this.ifm);
-      log(this.role, 'init:', ifm4msg);
+      this.log(this.role, 'init:', ifm4msg);
       nx.waitToDisplay(
         'iframe',
         200,
@@ -120,7 +125,7 @@ export default class IframeMate {
    * @param inTargetOrigin
    */
   post(inMessage: Message, inTargetOrigin = '*'): Promise<any> {
-    this.options.debug && log(this.role, inMessage);
+    this.log(this.role, inMessage);
     const isSingle = !Array.isArray(inMessage);
     const message = isSingle ? [inMessage] : inMessage;
     const targetWin = this.targetWin;
@@ -163,6 +168,22 @@ export default class IframeMate {
   }
 
   /**
+   * Try to set root domain.
+   * @private
+   */
+  private initCorsDomain() {
+    if (!this.options.isCorsDomain) return;
+    const domain = rootDomain(window.location.href);
+
+    try {
+      document.domain = domain;
+      this.log(this.role, 'Set CORS domain success.', domain);
+    } catch (e) {
+      this.log('exception', e);
+    }
+  }
+
+  /**
    * 将 URL 后面添国 ?ifm=xyz 字符串参数
    * @param inUrl
    * @param inValue
@@ -174,7 +195,19 @@ export default class IframeMate {
     const uri = new URL(url);
     uri.searchParams.set('ifm', inValue);
     const ifmp = uri.pathname + uri.search;
-    log('ifmp', ifmp, uri.toString());
+    this.log('ifmp', ifmp, uri.toString());
     window.history[method](null, '', ifmp);
+  }
+
+  /**
+   * Log info when debug set to true.
+   * @param inRole
+   * @param args
+   * @private
+   */
+  private log(inRole, ...args) {
+    if (this.options.debug) {
+      log(inRole, ...args);
+    }
   }
 }

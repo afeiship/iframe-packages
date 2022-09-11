@@ -7,7 +7,7 @@ import commands from '../commands';
 export const AppProvider = () => {
   return (
     <HashRouter>
-      <ReactIframeMate commands={commands} routerType="hash" debug>
+      <ReactIframeMate commands={commands} routerType="hash" isCorsDomain debug>
         <App />
       </ReactIframeMate>
     </HashRouter>

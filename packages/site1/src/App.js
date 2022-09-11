@@ -11,10 +11,6 @@ function App() {
   const [v, setV] = useState();
   const { ifm } = useIfm({ navigate });
 
-  useEffect(() => {
-    document.domain = 'dev.com';
-  }, []);
-
   return (
     <div className="App">
       <header>

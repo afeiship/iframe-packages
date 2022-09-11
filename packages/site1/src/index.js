@@ -11,7 +11,7 @@ import commands from './commands';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <ReactIframeMate commands={commands} routerType="browser" debug>
+    <ReactIframeMate commands={commands} routerType="browser" isCorsDomain debug>
       <App />
     </ReactIframeMate>
   </BrowserRouter>

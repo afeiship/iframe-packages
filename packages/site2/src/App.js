@@ -12,10 +12,6 @@ function App() {
   const [tabKey, setTabKey] = useState('k1');
   const { ifm } = useIfm({ navigate, setTabKey });
 
-  useEffect(() => {
-    document.domain = 'dev.com';
-  }, []);
-
   return (
     <div className="App">
       <button
