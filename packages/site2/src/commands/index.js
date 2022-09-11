@@ -1,18 +1,18 @@
 export default {
-  updateRandom: function (inOptions, inContext) {
+  updateRandom: function (inPayload, inContext) {
     const { setV } = inContext;
-    const v = Math.random();
+    const v = inPayload || Math.random();
     setV('from parent: ' + v);
     return v;
   },
-  navigate: (inOptions, inContext) => {
+  navigate: (inPayload, inContext) => {
     const { navigate } = inContext;
-    navigate(inOptions.path);
+    navigate(inPayload.path);
   },
 
-  tabKey: (inOptions, inContext) => {
-    console.log('opts: ', inOptions, inContext);
+  tabKey: (inPayload, inContext) => {
+    console.log('opts: ', inPayload, inContext);
     const { setTabKey } = inContext;
-    setTabKey(inOptions);
+    setTabKey(inPayload);
   },
 };

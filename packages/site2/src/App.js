@@ -3,7 +3,7 @@ import { UptRandom } from './components/upt-random';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Qa1 } from './pages/qa1';
 import { Qa2 } from './pages/qa2';
-import { useIfm, useNavigation } from '@jswork/react-iframe-mate';
+import { useIfm } from '@jswork/react-iframe-mate';
 import { ATab } from './components/a-tab';
 import { useState } from 'react';
 
@@ -11,7 +11,6 @@ function App() {
   const navigate = useNavigate();
   const [tabKey, setTabKey] = useState('k1');
   const { ifm } = useIfm({ navigate, setTabKey });
-  const navi = useNavigation();
 
   return (
     <div className="App">
@@ -46,7 +45,6 @@ function App() {
       <button
         onClick={(e) => {
           console.log('set ifm');
-          navi.navigate('?ifm=eyJjb21tYW5kIjoibmF2aWdhdGUiLCJwYXlsb2FkIjp7InBhdGgiOiIvcWExIn19');
         }}>
         Set IFM
       </button>
