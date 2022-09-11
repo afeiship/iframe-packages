@@ -83,7 +83,7 @@ export default class IframeMate {
     // ifm only appear in parent(init stage will: standalone)
     if (this.ifm) {
       const ifm4msg = nx.Json2base64.decode(this.ifm);
-      log(this.role, 'init msg:', ifm4msg);
+      log(this.role, 'init:', ifm4msg);
       nx.waitToDisplay(
         'iframe',
         200,
