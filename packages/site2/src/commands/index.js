@@ -9,4 +9,10 @@ export default {
     const { navigate } = inContext;
     navigate(inOptions.path);
   },
+
+  tabKey: (inOptions, inContext) => {
+    console.log('opts: ', inOptions, inContext);
+    const { setTabKey } = inContext;
+    setTabKey(inOptions);
+  },
 };

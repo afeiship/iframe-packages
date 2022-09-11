@@ -28,7 +28,7 @@ export default class ReactIframeMate extends Component<ReactIframeMateProps, Rea
   render() {
     const { children } = this.props;
     const { instance } = this.state;
-    if(!instance) return null;
+    if (!instance) return null;
     return <Context.Provider value={{ ifm: instance }}>{children}</Context.Provider>;
   }
 }

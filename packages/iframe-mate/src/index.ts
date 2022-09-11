@@ -11,7 +11,7 @@ type Message = MessageItem | MessageItem[];
 type Command = Record<string, (ctx: any, ...args: any[]) => any>;
 type Role = 'child' | 'parent' | 'standalone';
 
-export type SupportRouterType = 'hash' | 'browser';
+export type SupportRouterType = 'hash' | 'browser' | 'hashbang';
 
 export interface Options {
   queryKey?: string;
@@ -75,7 +75,7 @@ export default class IframeMate {
     // ifm only appear in parent(init stage will: standalone)
     if (this.ifm) {
       const ifm4msg = nx.Json2base64.decode(this.ifm);
-
+      log(this.role, 'init msg:', ifm4msg);
       nx.waitToDisplay(
         'iframe',
         200,
@@ -115,6 +115,10 @@ export default class IframeMate {
 
     const results = message.map((msg) => {
       targetWin.postMessage(msg, inTargetOrigin);
+      const url = window.location.href;
+      const ifmString = nx.Json2base64.encode(msg);
+      if (msg.persist) this.updateIfm(url, ifmString);
+
       return new Promise((resolve, reject) => {
         const handler = (e) => {
           window.removeEventListener('message', handler);
@@ -135,5 +139,16 @@ export default class IframeMate {
 
   update(inObj: Context) {
     nx.mix(this.context, inObj);
+  }
+
+  updateIfm(inUrl: string, inValue: string, inOptions = { replace: true }) {
+    const stateMethod = inOptions.replace ? 'replaceState' : 'pushState';
+    const hashurl = `https://js.work` + inUrl.split('#')[1];
+    const url = inUrl.includes('#') ? hashurl : inUrl;
+    const uri = new URL(url);
+    uri.searchParams.set('ifm', inValue);
+    const ifmp = uri.pathname + uri.search;
+    log('ifmp', ifmp, uri.toString());
+    window.history[stateMethod](null, '', ifmp);
   }
 }

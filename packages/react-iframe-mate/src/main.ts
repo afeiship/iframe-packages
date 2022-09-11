@@ -1,5 +1,6 @@
 import Component from './components';
-import useIfmCtx from './components/use-ifm';
+import useIfm from './components/use-ifm';
+import { useNavigation } from './components/navigation-provider';
 
-export const useIfm = useIfmCtx;
 export default Component;
+export { useIfm, useNavigation };
