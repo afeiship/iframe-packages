@@ -133,7 +133,7 @@ export default class IframeMate {
         delete msg.persist;
         const url = window.location.href;
         const ifmString = nx.Json2base64.encode(msg);
-        this.updateIfm(url, ifmString);
+        this.updateIFM(url, ifmString);
       }
 
       return new Promise((resolve, reject) => {
@@ -163,11 +163,11 @@ export default class IframeMate {
   }
 
   /**
-   * 将 URL 后面添国 ?ifm 字符串参数
+   * 将 URL 后面添国 ?ifm=xyz 字符串参数
    * @param inUrl
    * @param inValue
    */
-  updateIfm(inUrl: string, inValue: string) {
+  private updateIFM(inUrl: string, inValue: string) {
     const method = this.options.ifmReplace ? 'replaceState' : 'pushState';
     const hashurl = `https://js.work` + inUrl.split('#')[1];
     const url = inUrl.includes('#') ? hashurl : inUrl;
