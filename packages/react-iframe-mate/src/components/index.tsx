@@ -2,12 +2,7 @@ import React, { Component, ReactNode, useContext } from 'react';
 import IframeMate from '@jswork/iframe-mate';
 import type { Options } from '@jswork/iframe-mate';
 
-export const Context = React.createContext<{ ifm: IframeMate } | null>(null);
-export const useIfm = (inCtx?) => {
-  const res = useContext(Context);
-  if (inCtx) res!.ifm.update(inCtx);
-  return res;
-};
+const IFMContext = React.createContext<{ ifm: IframeMate } | null>(null);
 
 type ReactIframeMateProps = Options & {
   commands: any[];
@@ -18,6 +13,12 @@ type ReactIframeMateProps = Options & {
 
 type ReactIframeState = {
   instance: IframeMate | null;
+};
+
+export const useIfm = (inCtx?) => {
+  const res = useContext(IFMContext);
+  if (inCtx) res!.ifm.update(inCtx);
+  return res;
 };
 
 export default class ReactIframeMate extends Component<ReactIframeMateProps, ReactIframeState> {
@@ -37,6 +38,6 @@ export default class ReactIframeMate extends Component<ReactIframeMateProps, Rea
     const { children } = this.props;
     const { instance } = this.state;
     if (!instance) return null;
-    return <Context.Provider value={{ ifm: instance }}>{children}</Context.Provider>;
+    return <IFMContext.Provider value={{ ifm: instance }}>{children}</IFMContext.Provider>;
   }
 }
