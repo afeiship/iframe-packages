@@ -42,7 +42,7 @@ describe('empty spec', () => {
     cy.get('iframe').then(($iframe) => {
       const doc = $iframe[0].contentWindow.document;
       const btn = doc.querySelector('button:nth-child(4)');
-      expect(btn.innerHTML).to.includes('k2');
+      expect(btn.innerHTML).to.includes('k1');
     });
   });
 });
