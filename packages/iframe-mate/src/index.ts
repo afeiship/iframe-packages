@@ -37,9 +37,9 @@ export default class IframeMate {
   public context: Context;
 
   /**
-   * 当前 iframe 的角色:
-   * parent: 作为父级，一定有子级存在
-   * child: 作为子级，一定有父级存在
+   * Get current iframe role.
+   * parent: As a parent, there must be a child.
+   * child: As a child, there must be a parent.
    * standalone: 独立存在，向上/向下，均不存在 iframe 元素
    * @return Role
    */
@@ -50,7 +50,7 @@ export default class IframeMate {
   }
 
   /**
-   * 判断当前所处的环境，是否存在 iframe，即需要通讯的场景。
+   * Detect if current environment is in iframe.
    * @return boolean
    */
   get mateable() {
@@ -58,7 +58,7 @@ export default class IframeMate {
   }
 
   /**
-   * 取得当前 url 中的 ifm 参数
+   * Get current ifm param from url.
    * @return string | undefined
    */
   get ifm(): string | undefined {
@@ -73,7 +73,7 @@ export default class IframeMate {
   }
 
   /**
-   * 取得当前所处环境的 iframe 元素
+   * Get current iframe element.
    * @return HTMLIFrameElement | undefined
    */
   get contentFrame(): HTMLIFrameElement {
@@ -81,7 +81,7 @@ export default class IframeMate {
   }
 
   /**
-   * 取得当前环境的 window 对象
+   * Get current window object.
    * @return Window
    */
   get targetWin() {
@@ -95,7 +95,7 @@ export default class IframeMate {
   }
 
   /**
-   * 构造函数: 根据 options 做一些基本的初始化工作
+   * Constructor of iframe mate.
    * @param inOptions
    */
   constructor(inOptions: Options) {
@@ -104,7 +104,7 @@ export default class IframeMate {
   }
 
   /**
-   * 初始化，一般需要放在 DOM 初始化完成的情况下进行
+   * Initialize iframe mate, should be called after dom ready.
    * @param inCommands
    * @param inContext
    */
@@ -147,7 +147,7 @@ export default class IframeMate {
   }
 
   /**
-   * 发送消息
+   * Send message instead of postMessage.
    * @param inMessage
    * @param inTargetOrigin
    */
@@ -187,7 +187,7 @@ export default class IframeMate {
   }
 
   /**
-   * 更新上下文
+   * Update command context.
    * @param inObj
    */
   update(inObj: Context) {
@@ -211,7 +211,7 @@ export default class IframeMate {
   }
 
   /**
-   * 将 URL 后面添国 ?ifm=xyz 字符串参数
+   * Add ifm query string to url.
    * @param inUrl
    * @param inValue
    */
