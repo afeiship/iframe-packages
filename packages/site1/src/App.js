@@ -4,12 +4,14 @@ import { Home } from './pages/home';
 import { About } from './pages/about';
 import { IframeApp } from './components/iframe-app';
 import { useIfm } from '@jswork/react-iframe-mate';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 function App() {
   const navigate = useNavigate();
   const [v, setV] = useState();
   const { ifm } = useIfm({ navigate });
+
+  console.log('app1 site1');
 
   return (
     <div className="App">

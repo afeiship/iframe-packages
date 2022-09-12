@@ -121,17 +121,15 @@ export default class IframeMate {
 
     if (this.ifm) {
       const ifm4msg = nx.Json2base64.decode(this.ifm);
-      this.log(this.role, 'init:', ifm4msg);
-      nx.waitToDisplay(
-        'iframe',
-        200,
-        () => {
-          this.contentFrame.addEventListener('load', () => {
-            this.post(ifm4msg);
-          });
-        },
-        this.options.times
-      );
+      this.log(this.role, 'init', this.ifm, ifm4msg);
+      const handler = (e: MessageEvent<MessageItem>) => {
+        const { command } = e.data;
+        if (command === 'ready') {
+          this.post(ifm4msg);
+          window.removeEventListener('message', handler);
+        }
+      };
+      window.addEventListener('message', handler);
     }
 
     // init commands context

@@ -73,6 +73,7 @@
   "dependencies": {
     "@jswork/iframe-mate": "^1.0.5",
     "@jswork/noop": "^1.0.0",
+    "@jswork/next-wait-to-display": "^1.0.7",
     "classnames": "^2.2.6"
   },
   "publishConfig": {
