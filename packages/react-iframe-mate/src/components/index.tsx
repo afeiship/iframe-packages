@@ -37,10 +37,9 @@ export default class ReactIframeMate extends Component<ReactIframeMateProps, Rea
   componentDidMount() {
     const { commands, context, harmony, ready, ...options } = this.props;
     const instance = new IframeMate(options);
-    const harmonyCtx = window['nx'];
     instance.init(commands, context);
     ready!(instance);
-    if (harmony && harmonyCtx) harmonyCtx.set(harmonyCtx, '$ifm', instance);
+    if (harmony) nx.set(nx, '$ifm', instance);
     this.setState({ instance });
   }
 
