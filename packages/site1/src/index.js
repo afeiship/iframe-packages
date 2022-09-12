@@ -6,12 +6,12 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import ReactIframeMate from '@jswork/react-iframe-mate';
-import commands from './commands';
+import commandRepo from './commands';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <ReactIframeMate commands={commands} routerType="browser" isCorsDomain debug>
+    <ReactIframeMate command={commandRepo} routerType="browser" isCorsDomain debug>
       <App />
     </ReactIframeMate>
   </BrowserRouter>

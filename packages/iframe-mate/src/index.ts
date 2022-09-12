@@ -8,9 +8,9 @@ import '@jswork/next-wait-to-display';
 type Context = Record<string, any>;
 type MessageItem = { command: string; persist?: boolean; payload?: any };
 type Message = MessageItem | MessageItem[];
-type Command = Record<string, (payload: any, ctx: Context) => any>;
 type Role = 'child' | 'parent' | 'standalone';
 
+export type CommandRepo = Record<string, (payload: any, ctx: Context) => any>;
 export type SupportRouterType = 'hash' | 'browser' | 'hashbang';
 
 export interface Options {
@@ -111,10 +111,10 @@ export default class IframeMate {
 
   /**
    * Initialize iframe mate, should be called after dom ready.
-   * @param inCommands
+   * @param inCommand
    * @param inContext
    */
-  init(inCommands: Command[], inContext: Context) {
+  init(inCommand: CommandRepo, inContext: Context) {
     // url: ifm message process
     // ifm only appear in parent(init stage will: standalone)
     this.initCorsDomain();
@@ -139,7 +139,7 @@ export default class IframeMate {
 
     window.addEventListener('message', (e: MessageEvent<MessageItem>) => {
       const { command, payload } = e.data;
-      const handler = inCommands[command];
+      const handler = inCommand[command];
       if (handler) {
         const res = Promise.resolve(handler(payload, this.context));
         res.then((ret) => {
