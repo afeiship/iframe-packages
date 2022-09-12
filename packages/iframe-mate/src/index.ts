@@ -118,19 +118,7 @@ export default class IframeMate {
     // url: ifm message process
     // ifm only appear in parent(init stage will: standalone)
     this.initCorsDomain();
-
-    if (this.ifm) {
-      const ifm4msg = nx.Json2base64.decode(this.ifm);
-      this.log(this.role, 'init', this.ifm, ifm4msg);
-      const handler = (e: MessageEvent<MessageItem>) => {
-        const { command } = e.data;
-        if (command === 'ready') {
-          this.post(ifm4msg);
-          window.removeEventListener('message', handler);
-        }
-      };
-      window.addEventListener('message', handler);
-    }
+    this.initIFMMessage();
 
     // init commands context
     inContext && this.update(inContext);
@@ -196,6 +184,24 @@ export default class IframeMate {
    */
   update(inObj: Context) {
     nx.mix(this.context, inObj);
+  }
+
+  /**
+   * Process message in url which contains `ifm`.
+   * @private
+   */
+  private initIFMMessage() {
+    if (!this.ifm) return;
+    const ifm4msg = nx.Json2base64.decode(this.ifm);
+    this.log(this.role, 'init', this.ifm, ifm4msg);
+    const handler = (e: MessageEvent<MessageItem>) => {
+      const { command } = e.data;
+      if (command === 'ready') {
+        this.post(ifm4msg);
+        window.removeEventListener('message', handler);
+      }
+    };
+    window.addEventListener('message', handler);
   }
 
   /**
