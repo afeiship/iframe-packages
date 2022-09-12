@@ -232,16 +232,16 @@ export default class IframeMate {
   /**
    * Log info when debug set to true.
    * @param inRole
-   * @param args
+   * @param inArgs
    * @private
    */
-  private log(inRole, ...args) {
+  private log(inRole, ...inArgs) {
     if (this.options.debug) {
       const color = colors[inRole] || colors.defaults;
       console.log(
         `%c[ifm-debug:${inRole}]:`,
         `padding: 1px; border-radius: 3px; color: #fff; background: ${color};`,
-        ...args
+        ...inArgs
       );
     }
   }
