@@ -7,7 +7,7 @@ import commandRepo from '../commands';
 export const AppProvider = () => {
   return (
     <HashRouter>
-      <ReactIframeMate command={commandRepo} routerType="hash" isCorsDomain debug>
+      <ReactIframeMate commands={commandRepo} routerType="hash" isCorsDomain debug>
         <App />
       </ReactIframeMate>
     </HashRouter>

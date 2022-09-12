@@ -11,7 +11,7 @@ import commandRepo from './commands';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <ReactIframeMate command={commandRepo} routerType="browser" isCorsDomain debug>
+    <ReactIframeMate commands={commandRepo} routerType="browser" isCorsDomain debug>
       <App />
     </ReactIframeMate>
   </BrowserRouter>

@@ -5,7 +5,7 @@ import type { Options, CommandRepo } from '@jswork/iframe-mate';
 const IFMContext = React.createContext<{ ifm: IframeMate } | null>(null);
 
 type ReactIframeMateProps = Options & {
-  command: CommandRepo;
+  commands: CommandRepo;
   context?: any;
   harmony?: boolean;
   children: ReactNode;
@@ -26,10 +26,10 @@ export default class ReactIframeMate extends Component<ReactIframeMateProps, Rea
   state = { instance: null };
 
   componentDidMount() {
-    const { command, context, harmony, ...options } = this.props;
+    const { commands, context, harmony, ...options } = this.props;
     const instance = new IframeMate(options);
     const harmonyCtx = window['nx'];
-    instance.init(command, context);
+    instance.init(commands, context);
     if (harmony && harmonyCtx) harmonyCtx.set(harmonyCtx, '$ifm', instance);
     this.setState({ instance });
   }

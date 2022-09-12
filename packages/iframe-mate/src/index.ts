@@ -111,10 +111,10 @@ export default class IframeMate {
 
   /**
    * Initialize iframe mate, should be called after dom ready.
-   * @param inCommand
+   * @param inCommands
    * @param inContext
    */
-  init(inCommand: CommandRepo, inContext: Context) {
+  init(inCommands: CommandRepo, inContext: Context) {
     // url: ifm message process
     // ifm only appear in parent(init stage will: standalone)
     this.initCorsDomain();
@@ -139,7 +139,7 @@ export default class IframeMate {
 
     window.addEventListener('message', (e: MessageEvent<MessageItem>) => {
       const { command, payload } = e.data;
-      const handler = inCommand[command];
+      const handler = inCommands[command];
       if (handler) {
         const res = Promise.resolve(handler(payload, this.context));
         res.then((ret) => {
