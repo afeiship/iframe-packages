@@ -56,14 +56,6 @@ export default class IframeMate {
   }
 
   /**
-   * Detect if current environment is in iframe.
-   * @return boolean
-   */
-  get mateable() {
-    return this.role !== 'standalone';
-  }
-
-  /**
    * Get current ifm param from url.
    * @return string | undefined
    */
@@ -148,7 +140,8 @@ export default class IframeMate {
     const isSingle = !Array.isArray(inMessage);
     const message = isSingle ? [inMessage] : inMessage;
     const targetWin = this.targetWin;
-    if (!this.mateable || !targetWin) return Promise.resolve(null);
+    const isMate = this.role !== 'standalone';
+    if (!isMate || !targetWin) return Promise.resolve(null);
 
     const results = message.map((msg) => {
       targetWin.postMessage(msg, inTargetOrigin);
