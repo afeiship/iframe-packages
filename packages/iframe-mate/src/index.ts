@@ -191,7 +191,7 @@ export default class IframeMate {
       const { command } = e.data;
       if (command === 'ready') {
         this.post(ifm4msg);
-        window.removeEventListener('message', handler);
+        // window.removeEventListener('message', handler);
       }
     };
     window.addEventListener('message', handler);
