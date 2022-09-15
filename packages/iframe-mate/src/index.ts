@@ -41,6 +41,8 @@ const colors = {
 export default class IframeMate {
   public options: Options;
   public context: Context;
+  public encode = nx.Json2base64.encode;
+  public decode = nx.Json2base64.decode;
 
   /**
    * Get current iframe role.
@@ -116,7 +118,7 @@ export default class IframeMate {
     inContext && this.update(inContext);
 
     window.addEventListener('message', (e: MessageEvent<MessageItem>) => {
-      const { command, payload } = e.data;
+      const {command, payload} = e.data;
       const handler = inCommands[command];
       if (handler) {
         const res = Promise.resolve(handler(payload, this.context));
@@ -188,7 +190,7 @@ export default class IframeMate {
     const ifm4msg = nx.Json2base64.decode(this.ifm);
     this.log(this.role, 'init', this.ifm, ifm4msg);
     const handler = (e: MessageEvent<MessageItem>) => {
-      const { command } = e.data;
+      const {command} = e.data;
       if (command === 'ready') {
         this.post(ifm4msg);
         // window.removeEventListener('message', handler);
