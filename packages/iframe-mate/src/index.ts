@@ -118,7 +118,7 @@ export default class IframeMate {
     inContext && this.update(inContext);
 
     window.addEventListener('message', (e: MessageEvent<MessageItem>) => {
-      const {command, payload} = e.data;
+      const { command, payload } = e.data;
       const handler = inCommands[command];
       if (handler) {
         const res = Promise.resolve(handler(payload, this.context));
@@ -186,11 +186,11 @@ export default class IframeMate {
    * @private
    */
   private initIFMMessage() {
-    if (!this.ifm) return;
-    const ifm4msg = nx.Json2base64.decode(this.ifm);
-    this.log(this.role, 'init', this.ifm, ifm4msg);
+    this.log(this.role, 'init-ifm', this.ifm);
     const handler = (e: MessageEvent<MessageItem>) => {
-      const {command} = e.data;
+      if (!this.ifm) return;
+      const ifm4msg = nx.Json2base64.decode(this.ifm);
+      const { command } = e.data;
       if (command === 'ready') {
         this.post(ifm4msg);
         // window.removeEventListener('message', handler);
