@@ -1,6 +1,7 @@
 export default {
+  updateQuery: () => {},
   navigate: (inOptions, ctx) => {
-    console.log('parent navigate opts:', inOptions)
+    console.log('parent navigate opts:', inOptions);
     const { navigate } = ctx;
     var url = inOptions.url;
     var delta = inOptions.delta;

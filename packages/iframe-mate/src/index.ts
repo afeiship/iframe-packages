@@ -6,7 +6,12 @@ import '@jswork/next-json2base64';
 import '@jswork/next-wait-to-display';
 
 type Context = Record<string, any>;
-type MessageItem = { command: string; persist?: boolean; payload?: any };
+type MessageItem = {
+  command: string;
+  persist?: boolean;
+  as?: 'ifm';
+  payload?: any;
+};
 type Message = MessageItem | MessageItem[];
 type Role = 'child' | 'parent' | 'standalone';
 
@@ -146,7 +151,13 @@ export default class IframeMate {
     if (!isMate || !targetWin) return Promise.resolve(null);
 
     const results = message.map((msg) => {
-      targetWin.postMessage(msg, inTargetOrigin);
+      if (msg.as === 'ifm') {
+        delete msg.as;
+        const ifmString = nx.Json2base64.encode(msg);
+        this.updateIFM('https://js.work', ifmString, this.targetWin!);
+      } else {
+        targetWin.postMessage(msg, inTargetOrigin);
+      }
 
       if (msg.persist) {
         delete msg.persist;
@@ -219,16 +230,19 @@ export default class IframeMate {
    * Add ifm query string to url.
    * @param inUrl
    * @param inValue
+   * @param inWin
+   * @private
    */
-  private updateIFM(inUrl: string, inValue: string) {
+  private updateIFM(inUrl: string, inValue: string, inWin?: Window) {
+    const targetWin = inWin || window;
     const method = this.options.ifmReplace ? 'replaceState' : 'pushState';
     const hashurl = `https://js.work` + inUrl.split('#')[1];
-    const url = inUrl.includes('#') ? hashurl : inUrl;
+    const url = this.options.routerType === 'hash' ? hashurl : inUrl;
     const uri = new URL(url);
     uri.searchParams.set('ifm', inValue);
     const ifmp = uri.pathname + uri.search;
     this.log('ifmp', ifmp, uri.toString());
-    window.history[method](null, '', ifmp);
+    targetWin.history[method](null, '', ifmp);
   }
 
   /**
