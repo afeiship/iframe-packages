@@ -1,6 +1,6 @@
 {
   "name": "@jswork/iframe-mate",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Iframe mate.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
