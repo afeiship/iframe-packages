@@ -15,11 +15,8 @@ type MessageItem = {
 };
 type Message = MessageItem | MessageItem[];
 type Role = 'child' | 'parent' | 'standalone';
-type PostOptions = {
-  origin?: string;
-  ifmReplace?: boolean;
-  target?: Window;
-};
+type UpdateIFMOptions = { ifmReplace?: boolean; target?: Window };
+type PostOptions = { origin?: string } & UpdateIFMOptions;
 
 export type CommandRepo = Record<string, (payload: any, ctx: Context) => any>;
 export type SupportRouterType = 'hash' | 'browser' | 'hashbang';
@@ -276,7 +273,7 @@ export default class IframeMate {
   private updateIFM(
     inUrl: string,
     inValue: string,
-    inOptions?: { target?: Window; ifmReplace?: boolean }
+    inOptions?: UpdateIFMOptions
   ) {
     const targetWin = inOptions?.target || window;
     const ifmReplace = inOptions?.ifmReplace || this.options.ifmReplace;
