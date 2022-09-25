@@ -10,15 +10,17 @@ import { ATab } from './components/a-tab';
 import { useEffect, useState } from 'react';
 
 function App() {
+  // ifmNavigate
+  // IfmLink
   const navigate = useNavigate();
   const [tabKey, setTabKey] = useState('k1');
   const { ifm } = useIfm({ navigate, setTabKey });
   const navx = (to) => {
-    navigate(to, { replace: true });
+    // navigate(to, { replace: true });
     ifm.post({
       as: 'ifm',
       command: 'navigate',
-      payload: { path: to },
+      payload: { path: to, options: { replace: true } },
     });
   };
 
@@ -66,13 +68,13 @@ function App() {
       <hr />
       <button
         onClick={(e) => {
-          navigate('/qa1');
+          navx('/qa1');
         }}>
         To Qa1 - push
       </button>
       <button
         onClick={(e) => {
-          navigate('/qa2', { replace: true });
+          navx('/qa2', { replace: true });
         }}>
         To Qa2 - replace
       </button>

@@ -44,6 +44,7 @@
     "@jswork/next-is-in-iframe": "^1.0.2",
     "@jswork/next-json2base64": "^1.0.4",
     "@jswork/next-qs": "^1.0.4",
+    "@jswork/next-url-watcher": "^1.0.5",
     "@jswork/next-wait-to-display": "^1.0.7",
     "@jswork/root-domain": "^1.0.0"
   }

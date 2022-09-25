@@ -4,6 +4,7 @@ import '@jswork/next-qs';
 import '@jswork/next-is-in-iframe';
 import '@jswork/next-json2base64';
 import '@jswork/next-wait-to-display';
+import '@jswork/next-url-watcher';
 
 type Context = Record<string, any>;
 type MessageItem = {
@@ -48,6 +49,7 @@ export default class IframeMate {
   public context: Context;
   public encode = nx.Json2base64.encode;
   public decode = nx.Json2base64.decode;
+  public urlWatcher = new nx.UrlWatcher();
 
   /**
    * Get current iframe role.
@@ -118,6 +120,7 @@ export default class IframeMate {
     // ifm only appear in parent(init stage will: standalone)
     this.initCorsDomain();
     this.initIFMMessage();
+    this.initURLWatcher();
 
     // init commands context
     inContext && this.update(inContext);
@@ -200,14 +203,22 @@ export default class IframeMate {
     this.log(this.role, 'init-ifm', this.ifm);
     const handler = (e: MessageEvent<MessageItem>) => {
       if (!this.ifm) return;
-      const ifm4msg = nx.Json2base64.decode(this.ifm);
       const { command } = e.data;
-      if (command === 'ready') {
-        this.post(ifm4msg);
-        // window.removeEventListener('message', handler);
-      }
+      if (command === 'ready') this.postIFM(e.data);
     };
     window.addEventListener('message', handler);
+  }
+
+  private initURLWatcher() {
+    this.urlWatcher.watch((previous, current) => {
+      if (this.ifm) {
+        const oldReplace = this.options.ifmReplace;
+        this.options.ifmReplace = true;
+        this.postIFM({ command: 'ready' }).then(() => {
+          this.options.ifmReplace = oldReplace;
+        });
+      }
+    });
   }
 
   /**
@@ -224,6 +235,17 @@ export default class IframeMate {
     } catch (e) {
       this.log('exception', e);
     }
+  }
+
+  /**
+   * Post message to parent window.
+   * @param inMessage
+   * @private
+   */
+  private postIFM(inMessage: MessageItem): Promise<any> {
+    if (!this.ifm) return Promise.resolve(null);
+    const ifm4msg = nx.Json2base64.decode(this.ifm);
+    return this.post(ifm4msg);
   }
 
   /**

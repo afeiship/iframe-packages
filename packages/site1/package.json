@@ -7,6 +7,7 @@
     "@jswork/next": "^1.1.5",
     "@jswork/next-json2base64": "^1.0.3",
     "@jswork/next-qs": "^1.0.1",
+    "@jswork/next-url-watcher": "^1.0.2",
     "@jswork/react-iframe-mate": "^1.0.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",

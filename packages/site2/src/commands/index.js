@@ -5,11 +5,17 @@ export default {
     setV('from parent: ' + v);
     return v;
   },
-  navigate: (inPayload, inContext) => {
-    const { navigate } = inContext;
-    navigate(inPayload.path);
+  navigate: (palyload, ctx) => {
+    const { navigate } = ctx;
+    var path = palyload.path;
+    var opts = palyload.options;
+    var delta = palyload.delta;
+    if (delta) {
+      navigate(delta);
+    } else {
+      navigate(path, opts);
+    }
   },
-
   tabKey: (inPayload, inContext) => {
     console.log('opts: ', inPayload, inContext);
     const { setTabKey } = inContext;

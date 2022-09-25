@@ -1,14 +1,14 @@
 export default {
-  updateQuery: () => {},
-  navigate: (inOptions, ctx) => {
-    console.log('parent navigate opts:', inOptions);
+  navigate: (palyload, ctx) => {
+    console.log('parent navigate opts:', palyload);
     const { navigate } = ctx;
-    var url = inOptions.url;
-    var delta = inOptions.delta;
+    var path = palyload.path;
+    var opts = palyload.options;
+    var delta = palyload.delta;
     if (delta) {
       navigate(delta);
     } else {
-      navigate(url);
+      navigate(path, opts);
     }
   },
 };
