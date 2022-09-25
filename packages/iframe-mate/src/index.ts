@@ -223,14 +223,13 @@ export default class IframeMate {
 
   private initURLWatcher() {
     this.urlWatcher.watch((previous, current) => {
-      if (this.ifm) {
-        // force to use replace mode
-        const oldReplace = this.options.ifmReplace;
-        this.options.ifmReplace = true;
-        this.postIFM({ command: 'ready' }).then(() => {
-          this.options.ifmReplace = oldReplace;
-        });
-      }
+      if (!this.ifm) return;
+      // force to use replace mode
+      const oldReplace = this.options.ifmReplace;
+      this.options.ifmReplace = true;
+      this.postIFM({ command: 'ready' }).then(() => {
+        this.options.ifmReplace = oldReplace;
+      });
     });
   }
 
@@ -256,8 +255,7 @@ export default class IframeMate {
    * @private
    */
   private postIFM(inMessage: MessageItem): Promise<any> {
-    if (!this.ifm) return Promise.resolve(null);
-    const ifm4msg = nx.Json2base64.decode(this.ifm);
+    const ifm4msg = nx.Json2base64.decode(this.ifm!);
     return this.post(ifm4msg);
   }
 
