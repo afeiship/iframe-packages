@@ -15,6 +15,11 @@ type MessageItem = {
 };
 type Message = MessageItem | MessageItem[];
 type Role = 'child' | 'parent' | 'standalone';
+type PostOptions = {
+  origin?: string;
+  ifmReplace?: boolean;
+  target?: Window;
+};
 
 export type CommandRepo = Record<string, (payload: any, ctx: Context) => any>;
 export type SupportRouterType = 'hash' | 'browser' | 'hashbang';
@@ -143,9 +148,9 @@ export default class IframeMate {
   /**
    * Send message instead of postMessage.
    * @param inMessage
-   * @param inTargetOrigin
+   * @param inOptions
    */
-  post(inMessage: Message, inTargetOrigin = '*'): Promise<any> {
+  post(inMessage: Message, inOptions?: PostOptions): Promise<any> {
     this.log(this.role, inMessage);
     const isSingle = !Array.isArray(inMessage);
     const message = isSingle ? [inMessage] : inMessage;
@@ -157,9 +162,12 @@ export default class IframeMate {
       if (msg.as === 'ifm') {
         delete msg.as;
         const ifmString = nx.Json2base64.encode(msg);
-        this.updateIFM('https://js.work', ifmString, this.targetWin!);
+        this.updateIFM('https://js.work', ifmString, {
+          target: this.targetWin!,
+          ifmReplace: inOptions?.ifmReplace,
+        });
       } else {
-        targetWin.postMessage(msg, inTargetOrigin);
+        targetWin.postMessage(msg, inOptions?.origin || '*');
       }
 
       if (msg.persist) {
@@ -224,12 +232,7 @@ export default class IframeMate {
   private initURLWatcher() {
     this.urlWatcher.watch((previous, current) => {
       if (!this.ifm) return;
-      // force to use replace mode
-      const oldReplace = this.options.ifmReplace;
-      this.options.ifmReplace = true;
-      this.postIFM({ command: 'ready' }).then(() => {
-        this.options.ifmReplace = oldReplace;
-      });
+      this.postIFM({ command: 'ready' }, { ifmReplace: true });
     });
   }
 
@@ -252,23 +255,32 @@ export default class IframeMate {
   /**
    * Post message to parent window.
    * @param inMessage
+   * @param inOptions
    * @private
    */
-  private postIFM(inMessage: MessageItem): Promise<any> {
+  private postIFM(
+    inMessage: MessageItem,
+    inOptions?: PostOptions
+  ): Promise<any> {
     const ifm4msg = nx.Json2base64.decode(this.ifm!);
-    return this.post(ifm4msg);
+    return this.post(ifm4msg, inOptions);
   }
 
   /**
    * Add ifm query string to url.
    * @param inUrl
    * @param inValue
-   * @param inWin
+   * @param inOptions
    * @private
    */
-  private updateIFM(inUrl: string, inValue: string, inWin?: Window) {
-    const targetWin = inWin || window;
-    const method = this.options.ifmReplace ? 'replaceState' : 'pushState';
+  private updateIFM(
+    inUrl: string,
+    inValue: string,
+    inOptions?: { target?: Window; ifmReplace?: boolean }
+  ) {
+    const targetWin = inOptions?.target || window;
+    const ifmReplace = inOptions?.ifmReplace || this.options.ifmReplace;
+    const method = ifmReplace ? 'replaceState' : 'pushState';
     const hashurl = `https://js.work` + inUrl.split('#')[1];
     const url = this.options.routerType === 'hash' ? hashurl : inUrl;
     const uri = new URL(url);
