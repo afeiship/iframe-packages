@@ -196,6 +196,18 @@ export default class IframeMate {
   }
 
   /**
+   * Go to a router path (You need have `navigate` command in your Application).
+   * @param inPath
+   */
+  navigate(inPath: string): void {
+    this.post({
+      as: 'ifm',
+      command: 'navigate',
+      payload: { path: inPath, options: { replace: true } },
+    });
+  }
+
+  /**
    * Process message in url which contains `ifm`.
    * @private
    */
@@ -212,6 +224,7 @@ export default class IframeMate {
   private initURLWatcher() {
     this.urlWatcher.watch((previous, current) => {
       if (this.ifm) {
+        // force to use replace mode
         const oldReplace = this.options.ifmReplace;
         this.options.ifmReplace = true;
         this.postIFM({ command: 'ready' }).then(() => {

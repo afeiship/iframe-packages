@@ -68,13 +68,13 @@ function App() {
       <hr />
       <button
         onClick={(e) => {
-          navx('/qa1');
+          ifm.navigate('/qa1');
         }}>
         To Qa1 - push
       </button>
       <button
         onClick={(e) => {
-          navx('/qa2', { replace: true });
+          ifm.navigate('/qa2');
         }}>
         To Qa2 - replace
       </button>
@@ -84,8 +84,7 @@ function App() {
 
       <button
         onClick={(e) => {
-          console.log('navx!');
-          navx('/qa4');
+          ifm.navigate('/qa4');
         }}>
         Use Navx
       </button>
