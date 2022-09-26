@@ -204,7 +204,7 @@ export default class IframeMate {
    * Go to a router path (You need have `navigate` command in your Application).
    * @param inPath
    */
-  navigate(inPath: string): void {
+  navigate(inPath: string) {
     this.post({
       as: 'ifm',
       command: 'navigate',
