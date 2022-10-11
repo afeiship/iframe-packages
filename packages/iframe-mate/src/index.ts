@@ -30,10 +30,14 @@ export interface Options {
   times?: number;
 }
 
+const ifmDebug =
+  process.env.NODE_ENV === 'development' ||
+  localStorage.getItem('__IFM_DEBUG__') === 'true';
+
 const defaults: Options = {
   queryKey: 'ifm',
   routerType: 'hash',
-  debug: false,
+  debug: ifmDebug,
   isCorsDomain: false,
   ifmReplace: false,
   times: 1000,
