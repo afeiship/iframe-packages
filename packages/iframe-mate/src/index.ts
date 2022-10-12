@@ -285,7 +285,8 @@ export default class IframeMate {
     const hashurl = `https://js.work` + inUrl.split('#')[1];
     const url = this.options.routerType === 'hash' ? hashurl : inUrl;
     const uri = new URL(url);
-    uri.searchParams.set('ifm', inValue);
+    const queryKey = this.options.queryKey!;
+    uri.searchParams.set(queryKey, inValue);
     const ifmp = uri.pathname + uri.search;
     this.log('ifmp', ifmp, uri.toString());
     targetWin.history[method](null, '', ifmp);
