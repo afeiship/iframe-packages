@@ -180,12 +180,13 @@ export default class IframeMate {
 
       return new Promise((resolve, reject) => {
         const handler = (e) => {
-          window.removeEventListener('message', handler);
           if (e.data.command === `${msg.command}.response`) {
             try {
               resolve(e.data.payload);
             } catch (e) {
               reject(e);
+            } finally {
+              window.removeEventListener('message', handler);
             }
           }
         };
