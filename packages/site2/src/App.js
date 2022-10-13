@@ -68,7 +68,7 @@ function App() {
       <hr />
       <button
         onClick={(e) => {
-          ifm.navigate('/qa1');
+          ifm.navigate({pathname:'/qa', subpath:'/qa1'});
         }}>
         To Qa1 - push
       </button>

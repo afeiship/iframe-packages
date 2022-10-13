@@ -10,7 +10,6 @@ type Context = Record<string, any>;
 type MessageItem = {
   command: string;
   persist?: boolean;
-  as?: string;
   payload?: any;
 };
 type Message = MessageItem | MessageItem[];
@@ -163,16 +162,7 @@ export default class IframeMate {
     if (!isMate || !targetWin) return Promise.resolve(null);
 
     const results = message.map((msg) => {
-      if (msg.as === 'ifm') {
-        delete msg.as;
-        const ifmString = nx.Json2base64.encode(msg);
-        this.updateIFM('https://js.work', ifmString, {
-          target: this.targetWin!,
-          ifmReplace: inOptions?.ifmReplace,
-        });
-      } else {
-        targetWin.postMessage(msg, inOptions?.origin || '*');
-      }
+      targetWin.postMessage(msg, inOptions?.origin || '*');
 
       if (msg.persist) {
         delete msg.persist;
@@ -245,14 +235,22 @@ export default class IframeMate {
 
   /**
    * Go to a router path (You need have `navigate` command in your Application).
-   * @param inPath
-   * @deprecated
+   * @param inOptions
    */
-  navigate(inPath: string) {
-    this.post({
-      as: 'ifm',
+  navigate(inOptions) {
+    const { pathname, subpath, replace } = inOptions;
+    const url = this.targetWin!.location.href;
+    const uri = new URL(url);
+    uri.pathname = pathname;
+
+    const ifmString = nx.Json2base64.encode({
       command: 'navigate',
-      payload: { path: inPath, options: { replace: true } },
+      payload: { path: subpath, options: { replace: true } },
+    });
+
+    this.updateIFM(uri.toString(), ifmString, {
+      target: this.targetWin!,
+      ifmReplace: replace,
     });
   }
 
@@ -323,7 +321,7 @@ export default class IframeMate {
     const ifmReplace = inOptions?.ifmReplace || this.options.ifmReplace;
     const method = ifmReplace ? 'replaceState' : 'pushState';
     const hashurl = `https://js.work` + inUrl.split('#')[1];
-    const url = this.options.routerType === 'hash' ? hashurl : inUrl;
+    const url = inUrl.includes('#') ? hashurl : inUrl;
     const uri = new URL(url);
     const queryKey = this.options.queryKey!;
     const hashSuffix = uri.hash ? `#${uri.hash}` : '';

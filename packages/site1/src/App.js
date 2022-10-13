@@ -2,6 +2,7 @@ import './App.css';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Home } from './pages/home';
 import { About } from './pages/about';
+import { Qa } from './pages/qa';
 import { IframeApp } from './components/iframe-app';
 import { useIfm } from '@jswork/react-iframe-mate';
 import { useState } from 'react';
@@ -53,6 +54,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/qa" element={<Qa />} />
       </Routes>
       <IframeApp src="http://s2.dev.com:5002/" />
     </div>
