@@ -211,6 +211,7 @@ export default class IframeMate {
   /**
    * Go to a router path (You need have `navigate` command in your Application).
    * @param inPath
+   * @deprecated
    */
   navigate(inPath: string) {
     this.post({
