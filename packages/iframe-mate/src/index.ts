@@ -17,6 +17,9 @@ type Message = MessageItem | MessageItem[];
 type Role = 'child' | 'parent' | 'standalone';
 type UpdateIFMOptions = { ifmReplace?: boolean; target?: Window };
 type PostOptions = { origin?: string } & UpdateIFMOptions;
+type Destroyable = {
+  destroy: () => void;
+};
 
 export type CommandRepo = Record<string, (payload: any, ctx: Context) => any>;
 export type SupportRouterType = 'hash' | 'browser' | 'hashbang';
@@ -198,6 +201,38 @@ export default class IframeMate {
     });
 
     return isSingle ? results[0] : Promise.all(results);
+  }
+
+  /**
+   * Send message instead of postMessage(Alias of post).
+   * @param inMessage
+   * @param inOptions
+   */
+  emit(inMessage: Message, inOptions?: PostOptions): Promise<any> {
+    return this.post(inMessage, inOptions);
+  }
+
+  /**
+   * Listen message which triggered by ifm command.
+   * @param inCommand
+   * @param inHandler
+   */
+  on(
+    inCommand: string,
+    inHandler: (payload: any, ctx: Context) => any
+  ): Destroyable {
+    const handler = (e: MessageEvent<MessageItem>) => {
+      const { command, payload } = e.data;
+      const shouldHandle = command === inCommand || command === '*';
+      if (shouldHandle) inHandler(payload, this.context);
+    };
+
+    window.addEventListener('message', handler);
+    return {
+      destroy: () => {
+        window.removeEventListener('message', handler);
+      },
+    };
   }
 
   /**
