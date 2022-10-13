@@ -154,7 +154,7 @@ export default class IframeMate {
    * @param inOptions
    */
   post(inMessage: Message, inOptions?: PostOptions): Promise<any> {
-    this.log(this.role, inMessage);
+    this.log('Current message is: ', inMessage);
     const isSingle = !Array.isArray(inMessage);
     const message = isSingle ? [inMessage] : inMessage;
     const targetWin = this.targetWin;
@@ -259,7 +259,7 @@ export default class IframeMate {
    * @private
    */
   private initIFMMessage() {
-    this.log(this.role, 'init-ifm', this.ifm);
+    this.log(this.ifm);
     const handler = (e: MessageEvent<MessageItem>) => {
       if (!this.ifm) return;
       const { command } = e.data;
@@ -285,9 +285,9 @@ export default class IframeMate {
 
     try {
       document.domain = domain;
-      this.log(this.role, 'Set CORS domain success.', domain);
+      this.log('Set CORS domain success.', domain);
     } catch (e) {
-      this.log(this.role, 'Set CORS domain failed', e);
+      this.log('Set CORS domain failed', e);
     }
   }
 
@@ -332,15 +332,14 @@ export default class IframeMate {
 
   /**
    * Log info when debug set to true.
-   * @param inRole
    * @param inArgs
    * @private
    */
-  private log(inRole, ...inArgs) {
+  private log(...inArgs) {
     if (this.options.debug) {
-      const color = colors[inRole] || colors.defaults;
+      const color = colors[this.role] || colors.defaults;
       console.log(
-        `%c[ifm-debug:${inRole}]:`,
+        `%c[ifm-debug:${this.role}]:`,
         `padding: 1px; border-radius: 3px; color: #fff; background: ${color};`,
         ...inArgs
       );
