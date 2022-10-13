@@ -327,7 +327,7 @@ export default class IframeMate {
     const uri = new URL(url);
     const queryKey = this.options.queryKey!;
     uri.searchParams.set(queryKey, inValue);
-    const ifmp = uri.pathname + uri.search + uri.hash;
+    const ifmp = uri.pathname + uri.search + '#' + uri.hash;
     targetWin.history[method](null, '', ifmp);
   }
 
