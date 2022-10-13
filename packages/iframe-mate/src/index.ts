@@ -180,7 +180,10 @@ export default class IframeMate {
 
       return new Promise((resolve, reject) => {
         const handler = (e) => {
-          if (e.data.command === `${msg.command}.response`) {
+          const cmd = e.data.command;
+          const respCmd = `${msg.command}.response`;
+          const isResponse = cmd === respCmd;
+          if (isResponse) {
             try {
               resolve(e.data.payload);
             } catch (e) {
