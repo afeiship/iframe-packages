@@ -178,7 +178,7 @@ export default class IframeMate {
         delete msg.persist;
         const url = window.location.href;
         const ifmString = nx.Json2base64.encode(msg);
-        this.updateIFM(url, ifmString);
+        this.updateIFM(url, ifmString, { ifmReplace: true });
       }
 
       return new Promise((resolve, reject) => {
@@ -326,8 +326,9 @@ export default class IframeMate {
     const url = this.options.routerType === 'hash' ? hashurl : inUrl;
     const uri = new URL(url);
     const queryKey = this.options.queryKey!;
+    const hashSuffix = uri.hash ? `#${uri.hash}` : '';
     uri.searchParams.set(queryKey, inValue);
-    const ifmp = uri.pathname + uri.search + '#' + uri.hash;
+    const ifmp = uri.pathname + uri.search + hashSuffix;
     targetWin.history[method](null, '', ifmp);
   }
 
