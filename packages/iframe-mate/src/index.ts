@@ -10,7 +10,7 @@ type Context = Record<string, any>;
 type MessageItem = {
   command: string;
   persist?: boolean;
-  as?: 'ifm';
+  as?: string;
   payload?: any;
 };
 type Message = MessageItem | MessageItem[];
