@@ -289,7 +289,7 @@ export default class IframeMate {
       document.domain = domain;
       this.log(this.role, 'Set CORS domain success.', domain);
     } catch (e) {
-      this.log('exception', e);
+      this.log(this.role, 'Set CORS domain failed', e);
     }
   }
 
@@ -327,8 +327,7 @@ export default class IframeMate {
     const uri = new URL(url);
     const queryKey = this.options.queryKey!;
     uri.searchParams.set(queryKey, inValue);
-    const ifmp = uri.pathname + uri.search;
-    this.log('ifmp', ifmp, uri.toString());
+    const ifmp = uri.pathname + uri.search + uri.hash;
     targetWin.history[method](null, '', ifmp);
   }
 
