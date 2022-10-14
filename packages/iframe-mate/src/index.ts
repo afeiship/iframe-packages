@@ -262,7 +262,7 @@ export default class IframeMate {
    * @private
    */
   private initIFMMessage() {
-    this.log(this.ifm);
+    this.log('Current ifm is: ', this.ifm);
     const handler = (e: MessageEvent<MessageItem>) => {
       if (!this.ifm) return;
       const { command } = e.data;
