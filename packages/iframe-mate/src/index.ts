@@ -16,8 +16,11 @@ type Message = MessageItem | MessageItem[];
 type Role = 'child' | 'parent' | 'standalone';
 type UpdateIFMOptions = { ifmReplace?: boolean; target?: Window };
 type PostOptions = { origin?: string } & UpdateIFMOptions;
-type Destroyable = {
-  destroy: () => void;
+type Destroyable = { destroy: () => void };
+type NavigateOptions = {
+  pathname: string;
+  replace?: boolean;
+  subpath?: string;
 };
 
 export type CommandRepo = Record<string, (payload: any, ctx: Context) => any>;
@@ -237,7 +240,7 @@ export default class IframeMate {
    * Go to a router path (You need have `navigate` command in your Application).
    * @param inOptions
    */
-  navigate(inOptions) {
+  navigate(inOptions: NavigateOptions) {
     const { pathname, subpath, replace } = inOptions;
     const url = this.targetWin!.location.href;
     const uri = new URL(url);
@@ -321,6 +324,7 @@ export default class IframeMate {
     const ifmReplace = inOptions?.ifmReplace || this.options.ifmReplace;
     const method = ifmReplace ? 'replaceState' : 'pushState';
     const hashurl = `https://js.work` + inUrl.split('#')[1];
+    // todo: not a good way to detect hashRouter
     const url = inUrl.includes('#') ? hashurl : inUrl;
     const uri = new URL(url);
     const queryKey = this.options.queryKey!;
