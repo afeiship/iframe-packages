@@ -15,14 +15,6 @@ function App() {
   const navigate = useNavigate();
   const [tabKey, setTabKey] = useState('k1');
   const { ifm } = useIfm({ navigate, setTabKey });
-  const navx = (to) => {
-    // navigate(to, { replace: true });
-    ifm.post({
-      as: 'ifm',
-      command: 'navigate',
-      payload: { path: to, options: { replace: true } },
-    });
-  };
 
   useEffect(() => {
     console.log('did mount.');
@@ -35,7 +27,7 @@ function App() {
           ifm.post({
             command: 'navigate',
             payload: {
-              url: '/about?a=1&b=2',
+              path: '/about?a=1&b=2',
             },
           });
         }}>
@@ -68,26 +60,35 @@ function App() {
       <hr />
       <button
         onClick={(e) => {
-          ifm.navigate({pathname:'/qa', subpath:'/qa1'});
+          ifm.navigate({ pathname: '/qa', subpath: '/qa1' });
         }}>
         To Qa1 - push
       </button>
       <button
         onClick={(e) => {
-          ifm.navigate('/qa2');
+          ifm.navigate({ pathname: '/qa', subpath: '/qa2' });
         }}>
         To Qa2 - replace
       </button>
-      <Link replace className="button" to="/qa3">
-        To Qa3
-      </Link>
-
       <button
         onClick={(e) => {
-          ifm.navigate('/qa4');
+          ifm.navigate({ pathname: '/qa', subpath: '/qa4' });
         }}>
-        Use Navx
+        To Q4
       </button>
+
+      <h4>
+        <center>Self/parent are the same</center>
+      </h4>
+      <nav>
+        <button onClick={(e) => navigate(-1)}>Self Back()</button>
+        <button onClick={(e) => navigate(1)}>Self Forward()</button>
+      </nav>
+
+      <nav>
+        <button onClick={(e) => ifm.emit({ command: 'back' })}>Parent Back()</button>
+        <button onClick={(e) => ifm.emit({ command: 'forward' })}>Parent Forward()</button>
+      </nav>
 
       <Routes>
         <Route path="/qa1" element={<Qa1 />} />

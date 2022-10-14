@@ -11,4 +11,10 @@ export default {
       navigate(path, opts);
     }
   },
+  back: (payload, ctx) => {
+    ctx.navigate(-1);
+  },
+  forward: (payload, ctx) => {
+    ctx.navigate(1);
+  },
 };
