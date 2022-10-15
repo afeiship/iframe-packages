@@ -258,6 +258,14 @@ export default class IframeMate {
   }
 
   /**
+   * Navigate to previous page.
+   */
+  back() {
+    this.targetWin!.history.back();
+    window.history.back();
+  }
+
+  /**
    * Process message in url which contains `ifm`.
    * @private
    */

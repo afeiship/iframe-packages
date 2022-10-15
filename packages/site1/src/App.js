@@ -1,5 +1,5 @@
 import './App.css';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Home } from './pages/home';
 import { About } from './pages/about';
 import { Qa } from './pages/qa';
@@ -11,8 +11,9 @@ function App() {
   const navigate = useNavigate();
   const [v, setV] = useState();
   const { ifm } = useIfm({ navigate });
+  const loc = useLocation();
 
-  console.log('app1 site1');
+  console.log('app1 site1', loc, loc.key);
 
   return (
     <div className="App">
