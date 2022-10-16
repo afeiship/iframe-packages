@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useIfm } from '.';
 
-interface IfmLinkProps {
+export interface IfmLinkProps {
   path: string;
   sub: string;
   referer: string;
