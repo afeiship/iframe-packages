@@ -1,7 +1,7 @@
 {
   "name": "@jswork/react-iframe-mate",
   "homepage": "https://js.work",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "React iframe mate component.",
   "license": "MIT",
   "main": "dist/index.js",
