@@ -60,19 +60,19 @@ function App() {
       <hr />
       <button
         onClick={(e) => {
-          ifm.navigate({ pathname: '/qa', subpath: '/qa1' });
+          ifm.navigate({ path: '/qa', sub: '/qa1' });
         }}>
         To Qa1 - push
       </button>
       <button
         onClick={(e) => {
-          ifm.navigate({ pathname: '/qa', subpath: '/qa2' });
+          ifm.navigate({ path: '/qa', sub: '/qa2' });
         }}>
         To Qa2 - replace
       </button>
       <button
         onClick={(e) => {
-          ifm.navigate({ pathname: '/qa', subpath: '/qa4' });
+          ifm.navigate({ path: '/qa', sub: '/qa4' });
         }}>
         To Q4
       </button>
