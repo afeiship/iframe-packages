@@ -7,20 +7,20 @@ import '@jswork/next-wait-to-display';
 import '@jswork/next-url-watcher';
 
 type Context = Record<string, any>;
-type MessageItem = {
-  command: string;
-  persist?: boolean;
-  payload?: any;
-};
+type MessageItem = { command: string; payload?: any };
 type Message = MessageItem | MessageItem[];
 type Role = 'child' | 'parent' | 'standalone';
-type UpdateIFMOptions = { ifmReplace?: boolean; target?: Window };
+type UpdateIFMOptions = {
+  ifmReplace?: boolean;
+  target?: Window;
+  routerType?: SupportRouterType;
+};
 type PostOptions = { origin?: string } & UpdateIFMOptions;
 type Destroyable = { destroy: () => void };
 type NavigateOptions = {
-  pathname?: string;
+  path?: string;
+  sub?: string;
   replace?: boolean;
-  subpath?: string;
 } & Record<string, any>;
 
 export type CommandRepo = Record<string, (payload: any, ctx: Context) => any>;
@@ -166,14 +166,6 @@ export default class IframeMate {
 
     const results = message.map((msg) => {
       targetWin.postMessage(msg, inOptions?.origin || '*');
-
-      if (msg.persist) {
-        delete msg.persist;
-        const url = window.location.href;
-        const ifmString = nx.Json2base64.encode(msg);
-        this.updateIFM(url, ifmString, { ifmReplace: true });
-      }
-
       return new Promise((resolve, reject) => {
         const handler = (e) => {
           const cmd = e.data.command;
@@ -241,15 +233,15 @@ export default class IframeMate {
    * @param inOptions
    */
   navigate(inOptions: NavigateOptions) {
-    const { pathname, subpath, replace, ...opts } = inOptions;
+    const { path, sub, replace, ...opts } = inOptions;
     const url = this.targetWin!.location.href;
     const uri = new URL(url);
-    if (pathname) uri.pathname = pathname;
+    if (path) uri.pathname = path;
 
     const ifmString = nx.Json2base64.encode({
       command: 'navigate',
       payload: {
-        path: subpath,
+        path: sub,
         options: { replace: true },
         ...opts,
       },
@@ -259,14 +251,6 @@ export default class IframeMate {
       target: this.targetWin!,
       ifmReplace: replace,
     });
-  }
-
-  /**
-   * Navigate to previous page.
-   */
-  back() {
-    this.targetWin!.history.back();
-    window.history.back();
   }
 
   /**
@@ -334,10 +318,10 @@ export default class IframeMate {
   ) {
     const targetWin = inOptions?.target || window;
     const ifmReplace = inOptions?.ifmReplace || this.options.ifmReplace;
+    const routerType = inOptions?.routerType || 'browser';
     const method = ifmReplace ? 'replaceState' : 'pushState';
     const hashurl = `https://js.work` + inUrl.split('#')[1];
-    // todo: not a good way to detect hashRouter
-    const url = inUrl.includes('#') ? hashurl : inUrl;
+    const url = routerType === 'hash' ? hashurl : inUrl;
     const uri = new URL(url);
     const queryKey = this.options.queryKey!;
     const hashSuffix = uri.hash ? `#${uri.hash}` : '';
