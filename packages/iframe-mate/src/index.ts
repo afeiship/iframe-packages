@@ -18,10 +18,10 @@ type UpdateIFMOptions = { ifmReplace?: boolean; target?: Window };
 type PostOptions = { origin?: string } & UpdateIFMOptions;
 type Destroyable = { destroy: () => void };
 type NavigateOptions = {
-  pathname: string;
+  pathname?: string;
   replace?: boolean;
   subpath?: string;
-};
+} & Record<string, any>;
 
 export type CommandRepo = Record<string, (payload: any, ctx: Context) => any>;
 export type SupportRouterType = 'hash' | 'browser' | 'hashbang';
@@ -241,14 +241,18 @@ export default class IframeMate {
    * @param inOptions
    */
   navigate(inOptions: NavigateOptions) {
-    const { pathname, subpath, replace } = inOptions;
+    const { pathname, subpath, replace, ...opts } = inOptions;
     const url = this.targetWin!.location.href;
     const uri = new URL(url);
-    uri.pathname = pathname;
+    if (pathname) uri.pathname = pathname;
 
     const ifmString = nx.Json2base64.encode({
       command: 'navigate',
-      payload: { path: subpath, options: { replace: true } },
+      payload: {
+        path: subpath,
+        options: { replace: true },
+        ...opts,
+      },
     });
 
     this.updateIFM(uri.toString(), ifmString, {
