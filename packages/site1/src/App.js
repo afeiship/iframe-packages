@@ -36,16 +36,6 @@ function App() {
           父调子: SET FIXED_VALUE
         </button>
         <button
-          onClick={(e) =>
-            ifm.post({
-              persist: true,
-              command: 'tabKey',
-              payload: 'k2',
-            })
-          }>
-          SET IFM: tabKey
-        </button>
-        <button
           onClick={(e) => {
             setV('ONLY_VALUE');
           }}>
