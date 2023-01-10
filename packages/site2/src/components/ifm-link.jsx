@@ -14,34 +14,17 @@ export default (props) => {
       },
     },
   });
+
   const target = path + '?ifm=' + ifmstr;
 
   const handleClick = (e) => {
     e.preventDefault();
-    console.log('target: ', target);
     ifm.post({
       command: 'navigate',
       payload: {
         path: target,
       },
     });
-
-    // ifm.navigate({
-    //   path,
-    //   sub: to,
-    //   referer,
-    //   replace: false,
-    // });
-
-    // ifm.post({
-    //   command: 'navigate',
-    //   payload: {
-    //     path: path,
-    //     options: {
-    //       replace: true,
-    //     },
-    //   },
-    // });
 
     onClick && onClick(e);
   };
