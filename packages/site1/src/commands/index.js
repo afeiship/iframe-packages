@@ -17,4 +17,7 @@ export default {
   forward: (payload, ctx) => {
     ctx.navigate(1);
   },
+  url: (payload, ctx) => {
+    return window.location.href;
+  },
 };
