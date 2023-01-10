@@ -1,10 +1,4 @@
 export default {
-  updateRandom: function (inPayload, inContext) {
-    const { setV } = inContext;
-    const v = inPayload || Math.random();
-    setV('from parent: ' + v);
-    return v;
-  },
   navigate: (palyload, ctx) => {
     const { navigate } = ctx;
     var path = palyload.path;
@@ -15,10 +9,5 @@ export default {
     } else {
       navigate(path, opts);
     }
-  },
-  tabKey: (inPayload, inContext) => {
-    console.log('opts: ', inPayload, inContext);
-    const { setTabKey } = inContext;
-    setTabKey(inPayload);
-  },
+  }
 };

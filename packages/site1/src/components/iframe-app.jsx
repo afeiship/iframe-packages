@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useEffect, useState, useRef } from 'react';
 
 const Container = styled.iframe`
   width: 80%;
@@ -7,5 +8,10 @@ const Container = styled.iframe`
 `;
 
 export const IframeApp = (props) => {
-  return <Container src={props.src} onLoad={props.onLoad} />;
+  const rootRef = useRef(null);
+  useEffect(() => {
+    console.log('rootRef.current:', rootRef.current);
+    rootRef.current.contentWindow.location.replace(props.src);
+  }, [props.src]);
+  return <Container ref={rootRef} onLoad={props.onLoad} />;
 };
