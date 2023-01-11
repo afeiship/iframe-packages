@@ -1,5 +1,4 @@
 import './App.css';
-import { UptRandom } from './components/upt-random';
 import { Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import { Qa1 } from './pages/qa1';
 import { Qa2 } from './pages/qa2';
@@ -37,6 +36,16 @@ function App() {
         <IfmLink path="/site3" to="/">
           Site3
         </IfmLink>
+        <button
+          onClick={(e) => {
+            console.log('to qa4');
+            ifm.navigate({
+              path: '/site2',
+              to: '/qa4',
+            });
+          }}>
+          toQa4
+        </button>
       </nav>
       <Routes>
         <Route path="/" element={<Qa1 />} />

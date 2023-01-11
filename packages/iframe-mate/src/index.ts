@@ -12,6 +12,11 @@ type Message = MessageItem | MessageItem[];
 type Role = 'child' | 'parent' | 'standalone';
 type PostOptions = { origin?: string };
 type Destroyable = { destroy: () => void };
+type NavigateOptions = {
+  path: string;
+  to: string;
+  referer?: string;
+};
 
 export type CommandRepo = Record<string, (payload: any, ctx: Context) => any>;
 export type SupportRouterType = 'hash' | 'browser' | 'hashbang';
@@ -183,6 +188,28 @@ export default class IframeMate {
    */
   emit(inMessage: Message, inOptions?: PostOptions): Promise<any> {
     return this.post(inMessage, inOptions);
+  }
+
+  /**
+   * Go to a router path (You need have `navigate` command in your Application).
+   * @param inOptions
+   */
+  navigate(inOptions: NavigateOptions) {
+    const { path, to, referer, ...opts } = inOptions;
+    const ifmStr = this.encode({
+      command: 'navigate',
+      payload: {
+        path: to,
+        referer,
+        options: {
+          replace: true,
+        },
+        ...opts,
+      },
+    });
+
+    const ifmPath = `${path}?ifm=${ifmStr}`;
+    void this.post({ command: 'navigate', payload: { path: ifmPath } });
   }
 
   /**

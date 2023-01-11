@@ -4,7 +4,7 @@ import IframeMate from '@jswork/iframe-mate';
 import type { Options, CommandRepo } from '@jswork/iframe-mate';
 import '@jswork/next-wait-to-display';
 
-const IFMContext = React.createContext<{ ifm: IframeMate } | null>(null);
+export const IFMContext = React.createContext<{ ifm: IframeMate } | null>(null);
 
 type ReactIframeMateProps = Options & {
   commands: CommandRepo;
