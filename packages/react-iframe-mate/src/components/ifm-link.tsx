@@ -7,11 +7,12 @@ export interface IfmLinkProps extends LinkProps {
   to: string;
   children: React.ReactNode;
   referer?: string;
+  target?: '_blank' | '_parent' | '_top' | '_self';
   onClick?: (e: React.MouseEvent) => void;
 }
 
 export const IfmLink = (props: IfmLinkProps) => {
-  const { path, children, referer, onClick, to, ...rest } = props;
+  const { path, children, referer, onClick, to, target, ...rest } = props;
   const ifm = useIfm()!.ifm;
   const isMate = ifm.role !== 'standalone';
   const [ori, setOri] = useState<string>();
@@ -26,11 +27,13 @@ export const IfmLink = (props: IfmLinkProps) => {
     }
   });
 
-  const target = `${path}?ifm=${ifmStr}`;
+  const ifmPath = `${path}?ifm=${ifmStr}`;
 
   const handleClick = (e) => {
-    e.preventDefault();
-    void ifm.post({ command: 'navigate', payload: { path: target } });
+    if (!target) {
+      e.preventDefault();
+      void ifm.post({ command: 'navigate', payload: { path: ifmPath } });
+    }
     onClick && onClick(e);
   };
 
@@ -42,7 +45,7 @@ export const IfmLink = (props: IfmLinkProps) => {
   }, []);
 
   return isMate ? (
-    <a href={`${ori}${target}`} {...rest} onClick={handleClick}>
+    <a href={`${ori}${ifmPath}`} target={target} {...rest} onClick={handleClick}>
       {children}
     </a>
   ) : (

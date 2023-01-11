@@ -28,10 +28,10 @@ function App() {
         <center>Site2</center>
       </h1>
       <nav>
-        <IfmLink path="/site2" to="/">
-          Qa1
+        <IfmLink target="_blank" path="/site2" to="/">
+          Qa1-openBlank
         </IfmLink>
-        <IfmLink path="/site2" to="/qa2">
+        <IfmLink target="_blank" path="/site2" to="/qa2">
           Qa2
         </IfmLink>
         <IfmLink path="/site3" to="/">
