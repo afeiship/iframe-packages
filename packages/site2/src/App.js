@@ -7,7 +7,9 @@ import { Qa3 } from './pages/qa3';
 import { Qa4 } from './pages/qa4';
 import { useIfm } from '@jswork/react-iframe-mate';
 import { useEffect, useState } from 'react';
-import IfmLink from './components/ifm-link';
+import { IfmLink } from '@jswork/react-iframe-mate';
+
+// import IfmLink from './components/ifm-link';
 
 function App() {
   // ifmNavigate
@@ -26,13 +28,13 @@ function App() {
         <center>Site2</center>
       </h1>
       <nav>
-        <IfmLink path="/site2" to="/" referer="site2">
+        <IfmLink path="/site2" to="/">
           Qa1
         </IfmLink>
-        <IfmLink path="/site2" to="/qa2" referer="site2">
+        <IfmLink path="/site2" to="/qa2">
           Qa2
         </IfmLink>
-        <IfmLink path="/site3" to="/" referer="site2">
+        <IfmLink path="/site3" to="/">
           Site3
         </IfmLink>
       </nav>

@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 import { useIfm } from '.';
 
 export interface IfmLinkProps extends LinkProps {
   path: string;
   to: string;
-  referer: string;
   children: React.ReactNode;
+  referer?: string;
   onClick?: (e: React.MouseEvent) => void;
 }
 
@@ -14,31 +14,39 @@ export const IfmLink = (props: IfmLinkProps) => {
   const { path, children, referer, onClick, to, ...rest } = props;
   const ifm = useIfm()!.ifm;
   const isMate = ifm.role !== 'standalone';
-
-  console.log('props:', props)
-
-  const handleClick = (e: React.MouseEvent) => {
-    ifm.navigate({
-      path,
-      sub: to,
+  const [ori, setOri] = useState<string>();
+  const ifmStr = ifm.encode({
+    command: 'navigate',
+    payload: {
+      path: to,
       referer,
-      replace: false
-    });
+      options: {
+        replace: true
+      }
+    }
+  });
+
+  const target = `${path}?ifm=${ifmStr}`;
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    void ifm.post({ command: 'navigate', payload: { path: target } });
     onClick && onClick(e);
   };
 
   useEffect(() => {
-    ifm
-      .post({
-        command: 'url'
-      })
-      .then((res) => {
-        console.log(res);
-      });
+    ifm.post({ command: 'url' }).then((res) => {
+      const uri = new URL(res);
+      setOri(uri.origin);
+    });
   }, []);
 
-  return (
-    <Link to={to} replace={isMate} {...rest} onClick={handleClick}>
+  return isMate ? (
+    <a href={`${ori}${target}`} {...rest} onClick={handleClick}>
+      {children}
+    </a>
+  ) : (
+    <Link to={to} {...rest} onClick={handleClick}>
       {children}
     </Link>
   );

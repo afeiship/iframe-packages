@@ -10,8 +10,9 @@ const Container = styled.iframe`
 export const IframeApp = (props) => {
   const rootRef = useRef(null);
   useEffect(() => {
-    console.log('rootRef.current:', rootRef.current);
-    rootRef.current.contentWindow.location.replace(props.src);
+    const iframeDom = rootRef.current;
+    const targetWin = iframeDom.contentWindow;
+    targetWin.location.replace(props.src);
   }, [props.src]);
   return <Container ref={rootRef} onLoad={props.onLoad} />;
 };

@@ -10,18 +10,8 @@ type Context = Record<string, any>;
 type MessageItem = { command: string; payload?: any };
 type Message = MessageItem | MessageItem[];
 type Role = 'child' | 'parent' | 'standalone';
-type UpdateIFMOptions = {
-  ifmReplace?: boolean;
-  target?: Window;
-  routerType?: SupportRouterType;
-};
-type PostOptions = { origin?: string } & UpdateIFMOptions;
+type PostOptions = { origin?: string };
 type Destroyable = { destroy: () => void };
-type NavigateOptions = {
-  path?: string;
-  sub?: string;
-  replace?: boolean;
-} & Record<string, any>;
 
 export type CommandRepo = Record<string, (payload: any, ctx: Context) => any>;
 export type SupportRouterType = 'hash' | 'browser' | 'hashbang';
@@ -31,7 +21,6 @@ export interface Options {
   routerType?: SupportRouterType;
   debug?: boolean;
   isCorsDomain?: boolean;
-  ifmReplace?: boolean;
   times?: number;
 }
 
@@ -44,7 +33,6 @@ const defaults: Options = {
   routerType: 'hash',
   debug: ifmDebug,
   isCorsDomain: false,
-  ifmReplace: false,
   times: 1000,
 };
 
@@ -229,31 +217,6 @@ export default class IframeMate {
   }
 
   /**
-   * Go to a router path (You need have `navigate` command in your Application).
-   * @param inOptions
-   */
-  navigate(inOptions: NavigateOptions) {
-    const { path, sub, replace, ...opts } = inOptions;
-    const url = this.targetWin!.location.href;
-    const uri = new URL(url);
-    if (path) uri.pathname = path;
-
-    const ifmString = nx.Json2base64.encode({
-      command: 'navigate',
-      payload: {
-        path: sub,
-        options: { replace: true },
-        ...opts,
-      },
-    });
-
-    this.updateIFM(uri.toString(), ifmString, {
-      target: this.targetWin!,
-      ifmReplace: replace,
-    });
-  }
-
-  /**
    * Process message in url which contains `ifm`.
    * @private
    */
@@ -270,7 +233,7 @@ export default class IframeMate {
   private initURLWatcher() {
     this.urlWatcher.watch((previous, current) => {
       if (!this.ifm) return;
-      this.postIFM({ command: 'ready' }, { ifmReplace: true });
+      this.postIFM({ command: 'ready' });
     });
   }
 
@@ -302,32 +265,6 @@ export default class IframeMate {
   ): Promise<any> {
     const ifm4msg = nx.Json2base64.decode(this.ifm!);
     return this.post(ifm4msg, inOptions);
-  }
-
-  /**
-   * Add ifm query string to url.
-   * @param inUrl
-   * @param inValue
-   * @param inOptions
-   * @private
-   */
-  private updateIFM(
-    inUrl: string,
-    inValue: string,
-    inOptions?: UpdateIFMOptions
-  ) {
-    const targetWin = inOptions?.target || window;
-    const ifmReplace = inOptions?.ifmReplace || this.options.ifmReplace;
-    const routerType = inOptions?.routerType || 'browser';
-    const method = ifmReplace ? 'replaceState' : 'pushState';
-    const hashurl = `https://js.work` + inUrl.split('#')[1];
-    const url = routerType === 'hash' ? hashurl : inUrl;
-    const uri = new URL(url);
-    const queryKey = this.options.queryKey!;
-    const hashSuffix = uri.hash ? `#${uri.hash}` : '';
-    uri.searchParams.set(queryKey, inValue);
-    const ifmp = uri.pathname + uri.search + hashSuffix;
-    targetWin.history[method](null, '', ifmp);
   }
 
   /**
