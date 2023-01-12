@@ -53,6 +53,7 @@ function App() {
             ifm.navigate({
               path: '/site2',
               to: '/qa4',
+              target: '_blank',
             });
           }}>
           toQa4 - navigate api

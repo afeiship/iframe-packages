@@ -16,6 +16,7 @@ type NavigateOptions = {
   path: string;
   to: string;
   referer?: string;
+  target?: '_blank' | '_parent' | '_top' | '_self';
 };
 
 export type CommandRepo = Record<string, (payload: any, ctx: Context) => any>;
@@ -191,11 +192,11 @@ export default class IframeMate {
   }
 
   /**
-   * Go to a router path (You need have `navigate` command in your Application).
+   * Go to a router path (You need have `navigate`/`url` command in your main Application).
    * @param inOptions
    */
   navigate(inOptions: NavigateOptions) {
-    const { path, to, referer, ...opts } = inOptions;
+    const { path, to, referer, target, ...opts } = inOptions;
     const queryKey = this.options.queryKey!;
     const ifmStr = this.encode({
       command: 'navigate',
@@ -210,7 +211,15 @@ export default class IframeMate {
     });
 
     const ifmPath = `${path}?${queryKey}=${ifmStr}`;
-    void this.post({ command: 'navigate', payload: { path: ifmPath } });
+    if (target) {
+      void this.post({ command: 'url' }).then((url) => {
+        const uri = new URL(url);
+        const origin = uri.origin;
+        window.open(`${origin}${ifmPath}`, target);
+      });
+    } else {
+      void this.post({ command: 'navigate', payload: { path: ifmPath } });
+    }
   }
 
   /**
