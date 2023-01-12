@@ -135,7 +135,7 @@ export default class IframeMate {
       if (handler) {
         const res = Promise.resolve(handler(payload, this.context));
         res.then((ret) => {
-          this.post({
+          void this.post({
             command: `${command}.response`,
             payload: ret,
           });
