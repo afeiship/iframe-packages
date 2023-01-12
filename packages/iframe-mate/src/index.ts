@@ -14,7 +14,7 @@ type PostOptions = { origin?: string };
 type Destroyable = { destroy: () => void };
 type NavigateOptions = {
   path: string;
-  to: string;
+  to?: string;
   referer?: string;
   target?: '_blank' | '_parent' | '_top' | '_self';
 };
@@ -210,7 +210,8 @@ export default class IframeMate {
       },
     });
 
-    const ifmPath = `${path}?${queryKey}=${ifmStr}`;
+    const ifmPath = !!to ? `${path}?${queryKey}=${ifmStr}` : path;
+
     if (target) {
       void this.post({ command: 'url' }).then((url) => {
         const uri = new URL(url);

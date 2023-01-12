@@ -58,6 +58,15 @@ function App() {
           }}>
           toQa4 - navigate api
         </button>
+
+        <button
+          onClick={(e) => {
+            ifm.navigate({
+              path: '/site3?ifm=eyJjb21tYW5kIjoibmF2aWdhdGUiLCJwYXlsb2FkIjp7InBhdGgiOiIvIiwib3B0aW9ucyI6eyJyZXBsYWNlIjp0cnVlfX19',
+            });
+          }}>
+          to qa3 - navigate absolute
+        </button>
       </NavContainer>
       <Routes>
         <Route path="/" element={<Qa1 />} />

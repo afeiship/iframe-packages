@@ -27,7 +27,7 @@ export const IfmLink = (props: IfmLinkProps) => {
     }
   });
 
-  const ifmPath = `${path}?ifm=${ifmStr}`;
+  const ifmPath = !!to ? `${path}?ifm=${ifmStr}` : path;
 
   const handleClick = (e) => {
     if (!target) {
@@ -54,4 +54,3 @@ export const IfmLink = (props: IfmLinkProps) => {
     </Link>
   );
 };
-
