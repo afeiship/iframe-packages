@@ -1,4 +1,5 @@
 import './App.css';
+import styled from 'styled-components';
 import { Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import { Qa1 } from './pages/qa1';
 import { Qa2 } from './pages/qa2';
@@ -10,12 +11,23 @@ import { IfmLink } from '@jswork/react-iframe-mate';
 
 // import IfmLink from './components/ifm-link';
 
+const NavContainer = styled.nav`
+  text-align: center;
+
+  a {
+    margin-right: 10px;
+  }
+
+  button {
+    margin: 10px auto;
+  }
+`;
+
 function App() {
   // ifmNavigate
   // IfmLink
   const navigate = useNavigate();
-  const [tabKey, setTabKey] = useState('k1');
-  const { ifm } = useIfm({ navigate, setTabKey });
+  const { ifm } = useIfm({ navigate });
 
   useEffect(() => {
     console.log('did mount.');
@@ -26,11 +38,11 @@ function App() {
       <h1>
         <center>Site2</center>
       </h1>
-      <nav>
+      <NavContainer>
         <IfmLink target="_blank" path="/site2" to="/">
           Qa1-openBlank
         </IfmLink>
-        <IfmLink target="_blank" path="/site2" to="/qa2">
+        <IfmLink path="/site2" to="/qa2">
           Qa2
         </IfmLink>
         <IfmLink path="/site3" to="/">
@@ -38,15 +50,14 @@ function App() {
         </IfmLink>
         <button
           onClick={(e) => {
-            console.log('to qa4');
             ifm.navigate({
               path: '/site2',
               to: '/qa4',
             });
           }}>
-          toQa4
+          toQa4 - navigate api
         </button>
-      </nav>
+      </NavContainer>
       <Routes>
         <Route path="/" element={<Qa1 />} />
         <Route path="/qa2" element={<Qa2 />} />
