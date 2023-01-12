@@ -196,6 +196,7 @@ export default class IframeMate {
    */
   navigate(inOptions: NavigateOptions) {
     const { path, to, referer, ...opts } = inOptions;
+    const queryKey = this.options.queryKey!;
     const ifmStr = this.encode({
       command: 'navigate',
       payload: {
@@ -208,7 +209,7 @@ export default class IframeMate {
       },
     });
 
-    const ifmPath = `${path}?ifm=${ifmStr}`;
+    const ifmPath = `${path}?${queryKey}=${ifmStr}`;
     void this.post({ command: 'navigate', payload: { path: ifmPath } });
   }
 
