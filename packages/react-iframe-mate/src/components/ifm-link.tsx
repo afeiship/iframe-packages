@@ -12,7 +12,7 @@ export interface IfmLinkProps extends LinkProps {
 }
 
 export const IfmLink = (props: IfmLinkProps) => {
-  const { path, children, referer, onClick, to, target, ...rest } = props;
+  const { path, children, referer, onClick, to, target, replace, ...rest } = props;
   const ifm = useIfm()!.ifm;
   const isMate = ifm.role !== 'standalone';
   const [ori, setOri] = useState<string>();
@@ -32,7 +32,7 @@ export const IfmLink = (props: IfmLinkProps) => {
   const handleClick = (e) => {
     if (!target) {
       e.preventDefault();
-      void ifm.post({ command: 'navigate', payload: { path: ifmPath } });
+      void ifm.post({ command: 'navigate', payload: { path: ifmPath, replace } });
     }
     onClick && onClick(e);
   };
