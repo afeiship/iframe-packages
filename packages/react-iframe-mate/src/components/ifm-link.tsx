@@ -32,7 +32,13 @@ export const IfmLink = (props: IfmLinkProps) => {
   const handleClick = (e) => {
     if (!target) {
       e.preventDefault();
-      void ifm.post({ command: 'navigate', payload: { path: ifmPath, replace } });
+      void ifm.post({
+        command: 'navigate',
+        payload: {
+          path: ifmPath,
+          options: { replace }
+        }
+      });
     }
     onClick && onClick(e);
   };

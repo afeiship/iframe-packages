@@ -16,6 +16,7 @@ type NavigateOptions = {
   path: string;
   to?: string;
   referer?: string;
+  replace?: boolean;
   target?: '_blank' | '_parent' | '_top' | '_self';
 };
 
@@ -196,7 +197,7 @@ export default class IframeMate {
    * @param inOptions
    */
   navigate(inOptions: NavigateOptions) {
-    const { path, to, referer, target, ...opts } = inOptions;
+    const { path, to, referer, target, replace, ...opts } = inOptions;
     const queryKey = this.options.queryKey!;
     const ifmStr = this.encode({
       command: 'navigate',
@@ -219,7 +220,10 @@ export default class IframeMate {
         window.open(`${origin}${ifmPath}`, target);
       });
     } else {
-      void this.post({ command: 'navigate', payload: { path: ifmPath } });
+      void this.post({
+        command: 'navigate',
+        payload: { path: ifmPath, options: { replace } },
+      });
     }
   }
 
