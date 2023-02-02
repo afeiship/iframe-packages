@@ -31,7 +31,7 @@ export const IfmLink = (props: IfmLinkProps) => {
 
   const handleClick = (e) => {
     if (!target) {
-      e.preventDefault();
+      if (isMate) e.preventDefault();
       void ifm.post({
         command: 'navigate',
         payload: {
