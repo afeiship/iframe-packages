@@ -217,7 +217,10 @@ export default class IframeMate {
       void this.post({ command: 'url' }).then((url) => {
         const uri = new URL(url);
         const origin = uri.origin;
-        window.open(`${origin}${ifmPath}`, target);
+        const targetUrl = ifmPath.includes('://')
+          ? ifmPath
+          : `${origin}${ifmPath}`;
+        window.open(targetUrl, target);
       });
     } else {
       void this.post({

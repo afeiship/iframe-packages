@@ -50,8 +50,10 @@ export const IfmLink = (props: IfmLinkProps) => {
     });
   }, []);
 
+  const targetUrl = ifmPath.includes('://') ? ifmPath : `${ori}${ifmPath}`;
+
   return isMate ? (
-    <a href={`${ori}${ifmPath}`} target={target} {...rest} onClick={handleClick}>
+    <a href={targetUrl} target={target} {...rest} onClick={handleClick}>
       {children}
     </a>
   ) : (
