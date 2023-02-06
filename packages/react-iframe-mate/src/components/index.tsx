@@ -29,7 +29,7 @@ export default class ReactIframeMate extends Component<ReactIframeMateProps, Rea
     harmony: false,
     ready: (ifmInstance) => {
       const selector = 'input[name="IFM_READY"]';
-      nx.waitToDisplay(selector, 200, () => ifmInstance.post({ command: 'ready' }));
+      nx.waitToDisplay(selector, 200, () => ifmInstance.post({ command: IframeMate.READY_MSG }));
     }
   };
   state = { instance: null };

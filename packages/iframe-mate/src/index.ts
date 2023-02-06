@@ -51,6 +51,7 @@ const colors = {
 };
 
 export default class IframeMate {
+  public static READY_MSG = 'ifm.ready';
   public options: Options;
   public context: Context;
   public encode = nx.Json2base64.encode;
@@ -270,7 +271,7 @@ export default class IframeMate {
     const handler = (e: MessageEvent<MessageItem>) => {
       if (!this.ifm) return;
       const { command } = e.data;
-      if (command === 'ready') this.postIFM(e.data);
+      if (command === IframeMate.READY_MSG) this.postIFM(e.data);
     };
     window.addEventListener('message', handler);
   }
@@ -278,7 +279,7 @@ export default class IframeMate {
   private initURLWatcher() {
     this.urlWatcher.watch((previous, current) => {
       if (!this.ifm) return;
-      this.postIFM({ command: 'ready' });
+      this.postIFM({ command: IframeMate.READY_MSG });
     });
   }
 
