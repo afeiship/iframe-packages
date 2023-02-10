@@ -27,7 +27,7 @@ export const IfmLink = (props: IfmLinkProps) => {
     }
   });
 
-  const ifmPath = !!to ? `${path}?ifm=${ifmStr}` : path;
+  const ifmPath = typeof to !== 'undefined' ? `${path}?ifm=${ifmStr}` : path;
 
   const handleClick = (e) => {
     if (!target) {
@@ -44,6 +44,7 @@ export const IfmLink = (props: IfmLinkProps) => {
   };
 
   useEffect(() => {
+    if (ifm.role !== 'child') return setOri(window.location.origin);
     ifm.post({ command: 'url' }).then((res) => {
       const uri = new URL(res);
       setOri(uri.origin);
