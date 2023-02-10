@@ -32,8 +32,7 @@ export interface Options {
 }
 
 const ifmDebug =
-  process.env.NODE_ENV === 'development' ||
-  localStorage.getItem('__IFM_DEBUG__') === 'true';
+  process.env.NODE_ENV === 'development' || localStorage.getItem('__IFM_DEBUG__') === 'true';
 
 const defaults: Options = {
   queryKey: 'ifm',
@@ -77,9 +76,7 @@ export default class IframeMate {
    */
   get ifm(): string | undefined {
     const targetQsUrl =
-      this.options.routerType === 'hash'
-        ? window.location.hash
-        : window.location.href;
+      this.options.routerType === 'hash' ? window.location.hash : window.location.href;
 
     const qs = nx.qs(targetQsUrl);
     const key = this.options.queryKey!;
@@ -200,28 +197,30 @@ export default class IframeMate {
   navigate(inOptions: NavigateOptions) {
     const { path, to, referer, target, replace, ...opts } = inOptions;
     const queryKey = this.options.queryKey!;
+    const role = this.role;
     const ifmStr = this.encode({
       command: 'navigate',
       payload: {
         path: to,
         referer,
-        options: {
-          replace: true,
-        },
+        options: { replace: true },
         ...opts,
       },
     });
 
-    const ifmPath = !!to ? `${path}?${queryKey}=${ifmStr}` : path;
+    const ifmPath = typeof to !== 'undefined' ? `${path}?${queryKey}=${ifmStr}` : path;
+
+    const openURL = (inOrigin: string) => {
+      const targetUrl = ifmPath.includes('://') ? ifmPath : `${inOrigin}${ifmPath}`;
+      window.open(targetUrl, target);
+    };
 
     if (target) {
+      // 独立的窗口，或者主应用里取 origin
+      if (role !== 'child') openURL(window.location.origin);
       void this.post({ command: 'url' }).then((url) => {
         const uri = new URL(url);
-        const origin = uri.origin;
-        const targetUrl = ifmPath.includes('://')
-          ? ifmPath
-          : `${origin}${ifmPath}`;
-        window.open(targetUrl, target);
+        openURL(uri.origin);
       });
     } else {
       void this.post({
@@ -236,10 +235,7 @@ export default class IframeMate {
    * @param inCommand
    * @param inHandler
    */
-  on(
-    inCommand: string,
-    inHandler: (payload: any, ctx: Context) => any
-  ): Destroyable {
+  on(inCommand: string, inHandler: (payload: any, ctx: Context) => any): Destroyable {
     const handler = (e: MessageEvent<MessageItem>) => {
       const { command, payload } = e.data;
       const shouldHandle = command === inCommand || command === '*';
@@ -305,10 +301,7 @@ export default class IframeMate {
    * @param inOptions
    * @private
    */
-  private postIFM(
-    inMessage: MessageItem,
-    inOptions?: PostOptions
-  ): Promise<any> {
+  private postIFM(inMessage: MessageItem, inOptions?: PostOptions): Promise<any> {
     const ifm4msg = nx.Json2base64.decode(this.ifm!);
     return this.post(ifm4msg, inOptions);
   }
