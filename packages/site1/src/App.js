@@ -4,7 +4,7 @@ import { Home } from './pages/home';
 import { About } from './pages/about';
 import { Qa } from './pages/qa';
 import { IframeApp } from './components/iframe-app';
-import { useIfm } from '@jswork/react-iframe-mate';
+import { IfmLink, useIfm } from '@jswork/react-iframe-mate';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -43,6 +43,9 @@ function App() {
         <NavLink to="/">Home</NavLink>
         <NavLink to="/site2">Site2</NavLink>
         <NavLink to="/site3">Site3</NavLink>
+        <IfmLink path="/site2" to="/qa2">
+          IFM-ToSite/q2
+        </IfmLink>
       </NavContainer>
       <AppContainer>
         <li>App1</li>
