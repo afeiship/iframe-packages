@@ -154,8 +154,7 @@ export default class IframeMate {
     const isSingle = !Array.isArray(inMessage);
     const message = isSingle ? [inMessage] : inMessage;
     const targetWin = this.targetWin;
-    const isMate = this.role !== 'standalone';
-    if (!isMate || !targetWin) return Promise.resolve(null);
+    if (!targetWin) return Promise.resolve(null);
 
     const results = message.map((msg) => {
       targetWin.postMessage(msg, inOptions?.origin || '*');

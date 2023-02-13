@@ -7,15 +7,14 @@ export interface IfmLinkProps extends Omit<LinkProps, 'to'> {
   to?: string;
   children: React.ReactNode;
   referer?: string;
-  debug?: boolean;
+  standalone?: boolean;
   target?: '_blank' | '_parent' | '_top' | '_self';
   onClick?: (e: React.MouseEvent) => void;
 }
 
 export const IfmLink = (props: IfmLinkProps) => {
-  const { path, children, referer, onClick, to, target, replace, debug, ...rest } = props;
+  const { path, children, referer, onClick, to, target, replace, standalone, ...rest } = props;
   const ifm = useIfm()!.ifm;
-  const isMate = ifm.role !== 'standalone';
   const [ori, setOri] = useState<string>();
   const ifmStr = ifm.encode({
     command: 'navigate',
@@ -32,7 +31,7 @@ export const IfmLink = (props: IfmLinkProps) => {
 
   const handleClick = (e) => {
     if (!target) {
-      if (isMate) e.preventDefault();
+      if (!standalone) e.preventDefault();
       void ifm.post({
         command: 'navigate',
         payload: {
@@ -54,7 +53,7 @@ export const IfmLink = (props: IfmLinkProps) => {
 
   const targetUrl = ifmPath.includes('://') ? ifmPath : `${ori}${ifmPath}`;
 
-  return !debug ? (
+  return !standalone ? (
     <a href={targetUrl} target={target} {...rest} onClick={handleClick}>
       {children}
     </a>

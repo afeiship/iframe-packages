@@ -44,7 +44,7 @@ function App() {
         <NavLink to="/site2">Site2</NavLink>
         <NavLink to="/site3">Site3</NavLink>
         <IfmLink path="/site2" to="/qa2">
-          IFM-ToSite/q2
+          IFM-ToSite-q2
         </IfmLink>
       </NavContainer>
       <AppContainer>
