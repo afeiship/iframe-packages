@@ -50,7 +50,7 @@ const colors = {
 };
 
 export default class IframeMate {
-  public static READY_MSG = 'ready';
+  public static READY_MSG = 'ifm.ready';
   public options: Options;
   public context: Context;
   public encode = nx.Json2base64.encode;
