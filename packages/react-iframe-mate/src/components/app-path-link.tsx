@@ -1,4 +1,4 @@
-import { useIfm } from '@jswork/react-iframe-mate';
+import { useIfm } from '.';
 import React, { useEffect, useState, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ export const AppPathLink = (inProps: Props) => {
   const [ori, setOri] = useState<string>();
   const [clicked, setClicked] = useState(false);
   const [targetURL, setTargetURL] = useState<string>('');
-  const appPathStr = encodeURIComponent(encodeURIComponent((`${subpath}#${to}`)));
+  const appPathStr = encodeURIComponent(encodeURIComponent((`${subpath || ''}#${to}`)));
 
   const handleClick = (inEvent: any) => {
     inEvent.preventDefault();
