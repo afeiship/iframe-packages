@@ -1,5 +1,6 @@
 import { NavigateFunction } from 'react-router-dom';
 import { NavigateOptions } from 'react-router';
+import { CommandRepo } from '@jswork/iframe-mate';
 
 type IContext = {
   navigate: NavigateFunction;
@@ -20,4 +21,4 @@ export default {
   },
 
   url: () => window.location.href
-};
+} as CommandRepo;
