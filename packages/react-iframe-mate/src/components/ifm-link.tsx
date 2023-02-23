@@ -15,9 +15,9 @@ export interface IfmLinkProps extends Omit<LinkProps, 'to'> {
 export const IfmLink = (props: IfmLinkProps) => {
   const { path, children, referer, onClick, to, target, replace, standalone, ...rest } = props;
   const navigate = useNavigate();
-  const ifm = useIfm()!.ifm;
+  const { ifm } = useIfm()!;
+  const isMainFrame = ifm.role !== 'child';
   const [ori, setOri] = useState<string>();
-  const isMainFrame = ifm.targetWin === window;
   const ifmStr = ifm.encode({
     command: 'navigate',
     payload: {
@@ -49,7 +49,7 @@ export const IfmLink = (props: IfmLinkProps) => {
   };
 
   useEffect(() => {
-    if (ifm.role !== 'child') return setOri(window.location.origin);
+    if (isMainFrame) return setOri(window.location.origin);
     ifm.post({ command: 'url' }).then((res) => {
       const uri = new URL(res);
       setOri(uri.origin);
