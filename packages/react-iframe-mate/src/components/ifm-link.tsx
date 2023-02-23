@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, LinkProps } from 'react-router-dom';
+import { Link, LinkProps, useNavigate } from 'react-router-dom';
 import { useIfm } from '.';
 
 export interface IfmLinkProps extends Omit<LinkProps, 'to'> {
@@ -14,8 +14,10 @@ export interface IfmLinkProps extends Omit<LinkProps, 'to'> {
 
 export const IfmLink = (props: IfmLinkProps) => {
   const { path, children, referer, onClick, to, target, replace, standalone, ...rest } = props;
+  const navigate = useNavigate();
   const ifm = useIfm()!.ifm;
   const [ori, setOri] = useState<string>();
+  const isMainFrame = ifm.targetWin === window;
   const ifmStr = ifm.encode({
     command: 'navigate',
     payload: {
@@ -26,19 +28,22 @@ export const IfmLink = (props: IfmLinkProps) => {
       }
     }
   });
-
   const ifmPath = typeof to !== 'undefined' ? `${path}?ifm=${ifmStr}` : path;
 
   const handleClick = (e) => {
     if (!target) {
       if (!standalone) e.preventDefault();
-      void ifm.post({
-        command: 'navigate',
-        payload: {
-          path: ifmPath,
-          options: { replace }
-        }
-      });
+      if (isMainFrame) {
+        navigate(ifmPath, { replace });
+      } else {
+        void ifm.post({
+          command: 'navigate',
+          payload: {
+            path: ifmPath,
+            options: { replace }
+          }
+        });
+      }
     }
     onClick && onClick(e);
   };
@@ -51,10 +56,10 @@ export const IfmLink = (props: IfmLinkProps) => {
     });
   }, []);
 
-  const targetUrl = ifmPath.includes('://') ? ifmPath : `${ori}${ifmPath}`;
+  const targetURL = ifmPath.includes('://') ? ifmPath : `${ori}${ifmPath}`;
 
   return !standalone ? (
-    <a href={targetUrl} target={target} {...rest} onClick={handleClick}>
+    <a href={targetURL} target={target} {...rest} onClick={handleClick}>
       {children}
     </a>
   ) : (
