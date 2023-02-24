@@ -58,6 +58,13 @@ export default class IframeMate {
   public urlWatcher = new nx.UrlWatcher();
 
   /**
+   * Get current router type.
+   */
+  get routerType() {
+    return this.options.routerType;
+  }
+
+  /**
    * Get current iframe role.
    * parent: As a parent, there must be a child.
    * child: As a child, there must be a parent.

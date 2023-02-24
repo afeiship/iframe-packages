@@ -10,16 +10,19 @@ type Props = {
   to: string;
   children: ReactNode;
   replace?: boolean;
+  routerType?: 'hash' | 'browser';
   onClick?: (e: React.MouseEvent) => void;
 };
 
-export const AppPathLink = (inProps: Props) => {
-  const { path, subpath, to, children, replace, onClick } = inProps;
+function AppPathLink(inProps: Props) {
+  const { path, subpath, to, children, replace, routerType, onClick } = inProps;
   const { ifm } = useIfm()!;
   const [ori, setOri] = useState<string>();
   const [clicked, setClicked] = useState(false);
-  const [targetURL, setTargetURL] = useState<string>('');
-  const appPathStr = encodeURIComponent(encodeURIComponent(`${subpath}#${to}`));
+  const [targetURL, setTargetURL] = useState<string>();
+  const _routerType = routerType || ifm.options.routerType;
+  const sep = _routerType === 'hash' ? '#' : '';
+  const appPathStr = encodeURIComponent(encodeURIComponent(`${subpath}${sep}${to}`));
   const navigate = useNavigate();
   const isReplace = replace === true || typeof replace === 'undefined';
 
@@ -49,4 +52,11 @@ export const AppPathLink = (inProps: Props) => {
       {children}
     </a>
   );
+}
+
+AppPathLink.defaultProps = {
+  subpath: '',
+  routerType: 'hash'
 };
+
+export default AppPathLink;
