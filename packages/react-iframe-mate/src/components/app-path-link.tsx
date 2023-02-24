@@ -20,7 +20,7 @@ function AppPathLink(inProps: Props) {
   const [ori, setOri] = useState<string>();
   const [clicked, setClicked] = useState(false);
   const [targetURL, setTargetURL] = useState<string>();
-  const _routerType = routerType || ifm.options.routerType;
+  const _routerType = routerType || ifm.routerType;
   const sep = _routerType === 'hash' ? '#' : '';
   const appPathStr = encodeURIComponent(encodeURIComponent(`${subpath}${sep}${to}`));
   const navigate = useNavigate();
