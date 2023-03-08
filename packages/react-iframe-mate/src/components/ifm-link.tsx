@@ -33,12 +33,10 @@ export const IfmLink = (props: IfmLinkProps) => {
   const ifmPath = typeof to !== 'undefined' ? `${path}?ifm=${ifmStr}` : path;
 
   const handleClick = (e): any => {
-    if (!target) {
-      const isMetaClick = e.ctrlKey || e.metaKey;
+    const isHotKey = e.ctrlKey || e.metaKey || e.shiftKey;
+    if (!target && !isHotKey) {
       if (!standalone) e.preventDefault();
-      if (isMetaClick) return window.open(targetURL, '_blank');
       if (isMainFrame) return navigate(ifmPath, { replace });
-
       void ifm.post({
         command: 'navigate',
         payload: {

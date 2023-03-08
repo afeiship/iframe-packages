@@ -25,12 +25,13 @@ function AppPathLink(inProps: Props) {
   const navigate = useNavigate();
   const isReplace = replace === true || typeof replace === 'undefined';
 
-  const handleClick = (inEvent: any): any => {
-    const isMetaKey = inEvent.ctrlKey || inEvent.metaKey;
-    inEvent.preventDefault();
-    if (isMetaKey) return window.open(targetURL, '_blank');
-    navigate(to, { replace: isReplace });
-    onClick && onClick(inEvent);
+  const handleClick = (e: any): any => {
+    const isHotKey = e.ctrlKey || e.metaKey || e.shiftKey;
+    if (!isHotKey) {
+      e.preventDefault();
+      navigate(to, { replace: isReplace });
+    }
+    onClick && onClick(e);
   };
 
   useEffect(() => {
