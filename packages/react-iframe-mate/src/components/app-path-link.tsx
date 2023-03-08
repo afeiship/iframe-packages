@@ -18,7 +18,6 @@ function AppPathLink(inProps: Props) {
   const { path, subpath, to, children, replace, routerType, onClick } = inProps;
   const { ifm } = useIfm()!;
   const [ori, setOri] = useState<string>();
-  const [clicked, setClicked] = useState(false);
   const [targetURL, setTargetURL] = useState<string>();
   const _routerType = routerType || ifm.routerType;
   const sep = _routerType === 'hash' ? '#' : '';
@@ -26,9 +25,11 @@ function AppPathLink(inProps: Props) {
   const navigate = useNavigate();
   const isReplace = replace === true || typeof replace === 'undefined';
 
-  const handleClick = (inEvent: any) => {
+  const handleClick = (inEvent: any): any => {
+    const isMetaKey = inEvent.ctrlKey || inEvent.metaKey;
     inEvent.preventDefault();
-    setClicked(true);
+    if (isMetaKey) return window.open(targetURL, '_blank');
+    navigate(to, { replace: isReplace });
     onClick && onClick(inEvent);
   };
 
@@ -45,7 +46,6 @@ function AppPathLink(inProps: Props) {
   }, [ori, path, appPathStr]);
 
   if (!targetURL) return null;
-  if (clicked) return navigate(to, { replace: isReplace }), null;
 
   return (
     <a href={targetURL} onClick={handleClick}>

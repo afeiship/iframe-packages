@@ -14,10 +14,11 @@ export interface IfmLinkProps extends Omit<LinkProps, 'to'> {
 
 export const IfmLink = (props: IfmLinkProps) => {
   const { path, children, referer, onClick, to, target, replace, standalone, ...rest } = props;
-  const navigate = useNavigate();
   const { ifm } = useIfm()!;
   const isMainFrame = ifm.role !== 'child';
   const [ori, setOri] = useState<string>();
+  const [targetURL, setTargetURL] = useState<string>();
+  const navigate = useNavigate();
   const ifmStr = ifm.encode({
     command: 'navigate',
     payload: {
@@ -28,26 +29,28 @@ export const IfmLink = (props: IfmLinkProps) => {
       }
     }
   });
+
   const ifmPath = typeof to !== 'undefined' ? `${path}?ifm=${ifmStr}` : path;
 
-  const handleClick = (e) => {
+  const handleClick = (e): any => {
     if (!target) {
+      const isMetaClick = e.ctrlKey || e.metaKey;
       if (!standalone) e.preventDefault();
-      if (isMainFrame) {
-        navigate(ifmPath, { replace });
-      } else {
-        void ifm.post({
-          command: 'navigate',
-          payload: {
-            path: ifmPath,
-            options: { replace }
-          }
-        });
-      }
+      if (isMetaClick) return window.open(targetURL, '_blank');
+      if (isMainFrame) return navigate(ifmPath, { replace });
+
+      void ifm.post({
+        command: 'navigate',
+        payload: {
+          path: ifmPath,
+          options: { replace }
+        }
+      });
     }
     onClick && onClick(e);
   };
 
+  // set origin
   useEffect(() => {
     if (isMainFrame) return setOri(window.location.origin);
     ifm.post({ command: 'url' }).then((res) => {
@@ -56,15 +59,18 @@ export const IfmLink = (props: IfmLinkProps) => {
     });
   }, []);
 
-  const targetURL = ifmPath.includes('://') ? ifmPath : `${ori}${ifmPath}`;
+  // set target url
+  useEffect(() => {
+    setTargetURL(ifmPath.includes('://') ? ifmPath : `${ori}${ifmPath}`);
+  }, [ori, ifmPath]);
 
-  return !standalone ? (
+  if (!targetURL) return null;
+  if (standalone)
+    return <Link to={to || '/'} {...rest} onClick={handleClick} children={children} />;
+
+  return (
     <a href={targetURL} target={target} {...rest} onClick={handleClick}>
       {children}
     </a>
-  ) : (
-    <Link to={to || '/'} {...rest} onClick={handleClick}>
-      {children}
-    </Link>
   );
 };

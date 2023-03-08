@@ -17,7 +17,7 @@ export default [
       file: pkg.main,
       format: 'umd',
       exports: 'named',
-      sourcemap: false,
+      sourcemap: true,
       name: 'ReactIframeMateComponent',
       globals: {
         '@jswork/noop': 'noop',
