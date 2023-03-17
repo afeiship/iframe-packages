@@ -8,12 +8,14 @@ export interface IfmLinkProps extends Omit<LinkProps, 'to'> {
   children: React.ReactNode;
   referer?: string;
   standalone?: boolean;
+  disabled?: boolean;
   target?: '_blank' | '_parent' | '_top' | '_self';
   onClick?: (e: React.MouseEvent) => void;
 }
 
-export const IfmLink = (props: IfmLinkProps) => {
-  const { path, children, referer, onClick, to, target, replace, standalone, ...rest } = props;
+function IfmLink(props: IfmLinkProps) {
+  const { path, children, referer, onClick, to, target, replace, standalone, disabled, ...rest } =
+    props;
   const { ifm } = useIfm()!;
   const isMainFrame = ifm.role !== 'child';
   const [ori, setOri] = useState<string>();
@@ -34,6 +36,7 @@ export const IfmLink = (props: IfmLinkProps) => {
 
   const handleClick = (e): any => {
     const isHotKey = e.ctrlKey || e.metaKey || e.shiftKey;
+    if (disabled) return e.preventDefault();
     if (!target && !isHotKey) {
       if (!standalone) e.preventDefault();
       if (isMainFrame) return navigate(ifmPath, { replace });
@@ -59,16 +62,28 @@ export const IfmLink = (props: IfmLinkProps) => {
 
   // set target url
   useEffect(() => {
+    if (disabled) return setTargetURL(undefined);
     setTargetURL(ifmPath.includes('://') ? ifmPath : `${ori}${ifmPath}`);
-  }, [ori, ifmPath]);
+  }, [ori, ifmPath, disabled]);
 
-  if (!targetURL) return null;
   if (standalone)
     return <Link to={to || '/'} {...rest} onClick={handleClick} children={children} />;
 
   return (
-    <a href={targetURL} target={target} {...rest} onClick={handleClick}>
+    <a
+      data-disabled={disabled}
+      aria-disabled={disabled}
+      href={targetURL}
+      target={target}
+      {...rest}
+      onClick={handleClick}>
       {children}
     </a>
   );
+}
+
+IfmLink.defaultProps = {
+  disabled: false
 };
+
+export default IfmLink;

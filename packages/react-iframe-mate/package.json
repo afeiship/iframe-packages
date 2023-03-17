@@ -75,7 +75,8 @@
     "@jswork/iframe-mate": "^1.0.37",
     "@jswork/next-wait-to-display": "^1.0.7",
     "@jswork/noop": "^1.0.0",
-    "classnames": "^2.2.6"
+    "classnames": "^2.2.6",
+    "insert-css": "^2.0.0"
   },
   "publishConfig": {
     "access": "public",

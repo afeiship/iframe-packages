@@ -10,12 +10,13 @@ type Props = {
   to: string;
   children: ReactNode;
   replace?: boolean;
+  disabled?: boolean;
   routerType?: 'hash' | 'browser';
   onClick?: (e: React.MouseEvent) => void;
 };
 
 function AppPathLink(inProps: Props) {
-  const { path, subpath, to, children, replace, routerType, onClick } = inProps;
+  const { path, subpath, to, children, replace, disabled, routerType, onClick } = inProps;
   const { ifm } = useIfm()!;
   const [ori, setOri] = useState<string>();
   const [targetURL, setTargetURL] = useState<string>();
@@ -27,6 +28,7 @@ function AppPathLink(inProps: Props) {
 
   const handleClick = (e: any): any => {
     const isHotKey = e.ctrlKey || e.metaKey || e.shiftKey;
+    if (disabled) return e.preventDefault();
     if (!isHotKey) {
       e.preventDefault();
       navigate(to, { replace: isReplace });
@@ -43,13 +45,12 @@ function AppPathLink(inProps: Props) {
   }, [ifm]);
 
   useEffect(() => {
+    if (disabled) return setTargetURL(undefined);
     setTargetURL(`${ori}${path}?app-path=${appPathStr}`);
-  }, [ori, path, appPathStr]);
-
-  if (!targetURL) return null;
+  }, [ori, path, appPathStr, disabled]);
 
   return (
-    <a href={targetURL} onClick={handleClick}>
+    <a data-disabled={disabled} href={targetURL} onClick={handleClick}>
       {children}
     </a>
   );
@@ -57,7 +58,8 @@ function AppPathLink(inProps: Props) {
 
 AppPathLink.defaultProps = {
   subpath: '',
-  routerType: 'hash'
+  routerType: 'hash',
+  disabled: false
 };
 
 export default AppPathLink;

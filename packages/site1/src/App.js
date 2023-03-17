@@ -43,8 +43,8 @@ function App() {
         <NavLink to="/">Home</NavLink>
         <NavLink to="/site2">Site2</NavLink>
         <NavLink to="/site3">Site3</NavLink>
-        <IfmLink path="/site2" to="/qa2">
-          IFM-ToSite-q2
+        <IfmLink disabled path="/site2" to="/qa2">
+          IFM-ToSite-q2(disabled)
         </IfmLink>
       </NavContainer>
       <AppContainer>

@@ -1,10 +1,17 @@
 import React, { Component, ReactNode, useContext } from 'react';
 import nx from '@jswork/next';
 import IframeMate from '@jswork/iframe-mate';
+import insertCss from 'insert-css';
 import type { Options, CommandRepo } from '@jswork/iframe-mate';
 import '@jswork/next-wait-to-display';
 
 export const IFMContext = React.createContext<{ ifm: IframeMate } | null>(null);
+const styles = `
+  [data-disabled="true"] {
+    cursor: not-allowed;
+    opacity:0.6;
+  }
+`;
 
 type ReactIframeMateProps = Options & {
   commands: CommandRepo;
@@ -39,6 +46,7 @@ export default class ReactIframeMate extends Component<ReactIframeMateProps, Rea
     const instance = new IframeMate(options);
     instance.init(commands, context);
     ready!(instance);
+    insertCss(styles);
     if (harmony) nx.set(nx, '$ifm', instance);
     this.setState({ instance });
   }
