@@ -308,7 +308,7 @@ export default class IframeMate {
    * @private
    */
   private postIFM(inMessage: MessageItem, inOptions?: PostOptions): Promise<any> {
-    const ifm4msg = nx.Json2base64.decode(this.ifm!);
+    const ifm4msg = this.decode(this.ifm!);
     return this.post(ifm4msg, inOptions);
   }
 
