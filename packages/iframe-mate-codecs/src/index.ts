@@ -1,7 +1,18 @@
 import nx from '@jswork/next';
 import '@jswork/next-json2base64';
 
+const SPECIAL_CHARS = { '@PLUS@': '+', '@MATCH@': '~' };
 const isEmptyObj = (inObj: any) => Object.keys(inObj).length === 0;
+const flip = (data) => Object.fromEntries(Object.entries(data).map(([key, value]) => [value, key]));
+const encodeSpecialChars = (inPath: string, isFlip?: boolean) => {
+  if (!inPath) return inPath;
+  const data = isFlip ? flip(SPECIAL_CHARS) : SPECIAL_CHARS;
+  const keys = Object.keys(data);
+  return keys.reduce((acc, key) => {
+    const reKey = isFlip ? `\\` + key : key;
+    return acc.replace(new RegExp(reKey, 'g'), data[key]);
+  }, inPath);
+};
 
 export default class {
   public static encode(inData: any) {
@@ -9,11 +20,14 @@ export default class {
     if (command !== 'navigate') return nx.Json2base64.encode(inData);
     const { path, options } = payload;
     let res = path;
+    // replace special chars:
+    res = encodeSpecialChars(res, true);
     if (!options) return res;
 
     const { replace, referer } = options;
+    const _referer = encodeSpecialChars(referer, true);
     if (replace) res += '+r';
-    if (referer) res += `+ref~${referer}`;
+    if (referer) res += `+ref~${_referer}`;
     return res;
   }
 
@@ -22,13 +36,15 @@ export default class {
     try {
       res = nx.Json2base64.decode(inData);
     } catch (_) {
-      const [path, ...codecs] = decodeURIComponent(inData).split('+');
+      const [_path, ...codecs] = decodeURIComponent(inData).split('+');
       const options: any = {};
       codecs.forEach((key) => {
-        if (key.includes('ref~')) options.referer = key.split('~')[1];
+        if (key.includes('ref~')) options.referer = encodeSpecialChars(key.split('~')[1]);
         if (key === 'r') options.replace = true;
       });
 
+      // replace special chars:
+      const path = encodeSpecialChars(_path);
       const payload = isEmptyObj(options) ? { path } : { path, options };
       res = { command: 'navigate', payload };
     }

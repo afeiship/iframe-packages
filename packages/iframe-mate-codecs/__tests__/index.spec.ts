@@ -137,3 +137,34 @@ describe('case5: input has encode by browser', () => {
     });
   });
 });
+
+describe('case6: input path has special char MATCH/PLUS', () => {
+  test('IFMCodecs decode nav cmd', () => {
+    const cmd = '/home@PLUS@case-db+ref~cas@MATCH@db';
+    const res = IFMCodecs.decode(cmd);
+    expect(res).toEqual({
+      command: 'navigate',
+      payload: {
+        path: '/home+case-db',
+        options: {
+          referer: 'cas~db',
+        },
+      },
+    });
+  });
+
+  test('IFMCodecs encode nav cmd', () => {
+    const cmd = {
+      command: 'navigate',
+      payload: {
+        path: '/home+case+db',
+        options: {
+          referer: 'cas~db',
+        },
+      },
+    };
+
+    const res = IFMCodecs.encode(cmd);
+    expect(res).toBe('/home@PLUS@case@PLUS@db+ref~cas@MATCH@db');
+  });
+});
