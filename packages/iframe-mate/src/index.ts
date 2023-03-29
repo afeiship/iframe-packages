@@ -1,8 +1,9 @@
 import rootDomain from '@jswork/root-domain';
-import '@jswork/next';
+import nx from '@jswork/next';
+import IFMCodecs from '@jswork/iframe-mate-codecs';
+
 import '@jswork/next-qs';
 import '@jswork/next-is-in-iframe';
-import '@jswork/next-json2base64';
 import '@jswork/next-wait-to-display';
 import '@jswork/next-url-watcher';
 
@@ -37,7 +38,7 @@ const DEBUG_KEY = '__IFM_DEBUG__';
 const isNodeDev = process.env.NODE_ENV === 'development';
 const ifmDebug = isNodeDev || localStorage.getItem(DEBUG_KEY) === 'true';
 const defaults: Options = {
-  codecs: nx.Json2base64,
+  codecs: IFMCodecs,
   queryKey: 'ifm',
   routerType: 'hash',
   debug: ifmDebug,
