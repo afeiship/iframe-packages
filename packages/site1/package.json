@@ -21,8 +21,6 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:dev": "start-server-and-test start http://s1.dev.com:5001 cypress:open",
@@ -39,10 +37,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "cypress": "^10.7.0",
-    "prettier": "^2.6.2",
-    "start-server-and-test": "^1.14.0"
   }
 }

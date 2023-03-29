@@ -20,6 +20,7 @@ type NavigateOptions = {
   target?: '_blank' | '_parent' | '_top' | '_self';
 };
 
+export type Codecs = { encode: (inData: any) => string; decode: (inData: string) => any };
 export type CommandRepo = Record<string, (payload: any, ctx: Context) => any>;
 export type SupportRouterType = 'hash' | 'browser' | 'hashbang';
 
@@ -29,12 +30,14 @@ export interface Options {
   debug?: boolean;
   isCorsDomain?: boolean;
   times?: number;
+  codecs?: Codecs;
 }
 
-const ifmDebug =
-  process.env.NODE_ENV === 'development' || localStorage.getItem('__IFM_DEBUG__') === 'true';
-
+const DEBUG_KEY = '__IFM_DEBUG__';
+const isNodeDev = process.env.NODE_ENV === 'development';
+const ifmDebug = isNodeDev || localStorage.getItem(DEBUG_KEY) === 'true';
 const defaults: Options = {
+  codecs: nx.Json2base64,
   queryKey: 'ifm',
   routerType: 'hash',
   debug: ifmDebug,
@@ -53,8 +56,8 @@ export default class IframeMate {
   public static READY_MSG = 'ifm.ready';
   public options: Options;
   public context: Context;
-  public encode = nx.Json2base64.encode;
-  public decode = nx.Json2base64.decode;
+  public encode: Codecs['encode'];
+  public decode: Codecs['decode'];
   public urlWatcher = new nx.UrlWatcher();
 
   /**
@@ -82,9 +85,8 @@ export default class IframeMate {
    * @return string | undefined
    */
   get ifm(): string | undefined {
-    const targetQsUrl =
-      this.options.routerType === 'hash' ? window.location.hash : window.location.href;
-
+    const { routerType } = this.options;
+    const targetQsUrl = routerType === 'hash' ? window.location.hash : window.location.href;
     const qs = nx.qs(targetQsUrl);
     const key = this.options.queryKey!;
     return qs[key];
@@ -118,6 +120,8 @@ export default class IframeMate {
    */
   constructor(inOptions: Options) {
     this.options = nx.mix(null, defaults, inOptions);
+    this.encode = this.options.codecs!.encode;
+    this.decode = this.options.codecs!.decode;
     this.context = {};
   }
 
