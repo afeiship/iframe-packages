@@ -1,6 +1,6 @@
 {
   "name": "@jswork/iframe-mate-codecs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A slim codecs solution for iframe mate.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
