@@ -49,13 +49,13 @@ export default class {
     if (!options) return res;
 
     const { replace, referer } = options;
-    const _referer = replacer(referer, true);
     if (replace) res += '+r';
-    if (referer) res += `+ref~${_referer}`;
+    if (referer) res += `+ref~${replacer(referer, true)}`;
     return res;
   }
 
   public static decode(inString: string) {
+    // todo: 这里的逻辑是假设 base64第1位不会以 / 开头
     const isNavCmd = inString.startsWith('/');
     if (!isNavCmd) return nx.Json2base64.decode(inString);
     const [_path, ...codecs] = decodeURIComponent(inString).split('+');
