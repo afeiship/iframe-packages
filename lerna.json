@@ -11,8 +11,9 @@
   ],
   "ignore": [
     "packages/websites",
-    "packages/site1",
-    "packages/site2"
+    "packages/zite1",
+    "packages/zite2",
+    "packages/zite3"
   ],
   "command": {
     "publish": {

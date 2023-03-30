@@ -50,5 +50,8 @@
       ],
       "@babel/preset-typescript"
     ]
+  },
+  "dependencies": {
+    "@jswork/next-json2base64": "^1.0.7"
   }
 }
