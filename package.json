@@ -10,7 +10,7 @@
     "lerna": "^3.22.1"
   },
   "scripts": {
-    "start": "yarn --cwd packages/websites start",
+    "start": "lerna run --parallel start",
     "lerna:clean": "lerna clean",
     "lerna:list": "lerna list",
     "lerna:bootstrap": "lerna bootstrap",
