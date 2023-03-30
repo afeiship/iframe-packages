@@ -55,9 +55,10 @@ export default class {
   }
 
   public static decode(inString: string) {
-    // todo: 这里的逻辑是假设 base64第1位不会以 / 开头
-    const isNavCmd = inString.startsWith('/');
-    if (!isNavCmd) return nx.Json2base64.decode(inString);
+    try {
+      return nx.Json2base64.decode(inString);
+    } catch (_) {}
+
     const [_path, ...codecs] = decodeURIComponent(inString).split('+');
     const options: any = {};
     codecs.forEach((key) => {

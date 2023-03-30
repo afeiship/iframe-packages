@@ -167,4 +167,15 @@ describe('case6: input path has special char MATCH/PLUS', () => {
     const res = IFMCodecs.encode(cmd);
     expect(res).toBe('/home@PLUS@case@PLUS@db+ref~cas@MATCH@db');
   });
+
+  test('IFMCodecs decode old version:eyJjb21tYW5kIjoibmF2aWdhdGUiLCJwYXlsb2FkIjp7InBhdGgiOiIvIn19', () => {
+    const str = 'eyJjb21tYW5kIjoibmF2aWdhdGUiLCJwYXlsb2FkIjp7InBhdGgiOiIvIn19';
+    const res = IFMCodecs.decode(str);
+    expect(res).toEqual({
+      command: 'navigate',
+      payload: {
+        path: '/',
+      },
+    });
+  });
 });
