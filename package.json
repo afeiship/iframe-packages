@@ -11,6 +11,7 @@
   },
   "scripts": {
     "start": "lerna run --parallel start",
+    "sync": "cnpm sync @jswork/iframe-mate-codecs @jswork/iframe-mate @jswork/react-iframe-mate",
     "lerna:clean": "lerna clean",
     "lerna:list": "lerna list",
     "lerna:bootstrap": "lerna bootstrap",
