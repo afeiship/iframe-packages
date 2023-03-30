@@ -25,15 +25,22 @@ const isEmptyObj = (inObj: any) => Object.keys(inObj).length === 0;
 const replacer = (inPath: string, isFlip?: boolean) => {
   if (!inPath) return inPath;
   const data = isFlip ? flip(SPECIAL_CHARS) : SPECIAL_CHARS;
-  const keys = Object.keys(data);
-  return keys.reduce((acc, key) => {
+  return Object.keys(data).reduce((acc, key) => {
     const reKey = isFlip ? `\\` + key : key;
     return acc.replace(new RegExp(reKey, 'g'), data[key]);
   }, inPath);
 };
 
+type DataEncode = {
+  command: string;
+  payload: {
+    path: string;
+    options?: { replace?: boolean; referer?: string };
+  };
+};
+
 export default class {
-  public static encode(inData: any) {
+  public static encode(inData: DataEncode) {
     const { command, payload } = inData;
     if (command !== 'navigate') return nx.Json2base64.encode(inData);
     const { path, options } = payload;
