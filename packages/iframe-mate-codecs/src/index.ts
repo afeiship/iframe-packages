@@ -1,9 +1,9 @@
 import nx from '@jswork/next';
+import flip from '@jswork/flip-kv';
 import '@jswork/next-json2base64';
 
 const SPECIAL_CHARS = { '@PLUS@': '+', '@MATCH@': '~' };
 const isEmptyObj = (inObj: any) => Object.keys(inObj).length === 0;
-const flip = (data) => Object.fromEntries(Object.entries(data).map(([key, value]) => [value, key]));
 const replacer = (inPath: string, isFlip?: boolean) => {
   if (!inPath) return inPath;
   const data = isFlip ? flip(SPECIAL_CHARS) : SPECIAL_CHARS;
