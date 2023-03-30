@@ -30,23 +30,19 @@ export default class {
     return res;
   }
 
-  public static decode(inData: string) {
-    let res;
-    try {
-      res = nx.Json2base64.decode(inData);
-    } catch (_) {
-      const [_path, ...codecs] = decodeURIComponent(inData).split('+');
-      const options: any = {};
-      codecs.forEach((key) => {
-        if (key.includes('ref~')) options.referer = replacer(key.split('~')[1]);
-        if (key === 'r') options.replace = true;
-      });
+  public static decode(inString: string) {
+    const isNavCmd = inString.startsWith('/');
+    if (!isNavCmd) return nx.Json2base64.decode(inString);
+    const [_path, ...codecs] = decodeURIComponent(inString).split('+');
+    const options: any = {};
+    codecs.forEach((key) => {
+      if (key.includes('ref~')) options.referer = replacer(key.split('~')[1]);
+      if (key === 'r') options.replace = true;
+    });
 
-      // replace special chars:
-      const path = replacer(_path);
-      const payload = isEmptyObj(options) ? { path } : { path, options };
-      res = { command: 'navigate', payload };
-    }
-    return res;
+    // replace special chars:
+    const path = replacer(_path);
+    const payload = isEmptyObj(options) ? { path } : { path, options };
+    return { command: 'navigate', payload };
   }
 }
