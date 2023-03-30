@@ -2,6 +2,24 @@ import nx from '@jswork/next';
 import flip from '@jswork/flip-kv';
 import '@jswork/next-json2base64';
 
+/**
+ * 此功能是针对 iframe-mate 的特殊需求，用于处理路径中的特殊字符。
+ * 1. 原来的 url 中 ifm 表现如下：
+ *  ifm=eyJjb21tYW5kIjoibmF2aWdhdGUiLCJwYXlsb2FkIjp7InBhdGgiOiIvIn19
+ *  存在问题：语义化不强，不利于调试。
+ * 2. 改进后的形式如下：
+ *  ifm=/+ref~casdb+r
+ * 语义化更强，更利于调试。
+ * 3. 各字段说明:
+ *  ifm=/: 这段表示子项目的 path 是 /
+ *  ifm=+ref~casdb: 这段表示 referer 是 casdb
+ *  ifm=+r: 这段表示 replace 是 true
+ * 4. 还存在一种 case: 我们在 referer 或者 path 中会出现 + 或者 ~
+ *  这种情况下，我们需要对其进行转义，转义规则如下：
+ *  + -> @PLUS@
+ *  ~ -> @MATCH@
+ */
+
 const SPECIAL_CHARS = { '@PLUS@': '+', '@MATCH@': '~' };
 const isEmptyObj = (inObj: any) => Object.keys(inObj).length === 0;
 const replacer = (inPath: string, isFlip?: boolean) => {
