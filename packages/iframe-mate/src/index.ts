@@ -127,6 +127,14 @@ export default class IframeMate {
   }
 
   /**
+   * Update ifm options.
+   * @param inOptions
+   */
+  updateOptions(inOptions: Options) {
+    this.options = nx.mix(null, this.options, inOptions);
+  }
+
+  /**
    * Initialize iframe mate, should be called after dom ready.
    * @param inCommands
    * @param inContext
